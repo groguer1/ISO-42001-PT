@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ISO/IEC 42001 M08 PT-BR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>:root{--azul:#1A3A5C;--azul-mid:#2563A8;--acento:#E85820;--verde:#2D8B5A;--rojo:#C0392B;--amarillo:#F0A500;--morado:#6B48A8;--gris-claro:#F4F6FA;--gris-medio:#8A9BB0;--texto:#1C2B3A}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--azul)}
+#shell{display:flex;flex-direction:column;height:100vh;max-width:1100px;margin:0 auto;padding:0 12px}
+#progress-wrap{height:5px;background:rgba(255,255,255,.18);margin:0 -12px;flex-shrink:0}
+#progress-bar{height:100%;background:linear-gradient(90deg,var(--acento),var(--amarillo));width:0%;transition:width .5s ease}
+#topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 0;flex-shrink:0}
+#course-label{font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.55);text-transform:uppercase}
+#slide-counter{font-size:13px;font-weight:600;color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);padding:4px 12px;border-radius:20px}
+#stage{flex:1;position:relative;overflow:hidden;border-radius:14px}
+.slide{position:absolute;inset:0;opacity:0;transform:translateX(60px);transition:opacity .45s ease,transform .45s cubic-bezier(.4,0,.2,1);pointer-events:none;overflow-y:auto}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.exit-left{opacity:0;transform:translateX(-60px)}
+#navbar{display:flex;align-items:center;justify-content:space-between;padding:10px 0;flex-shrink:0;gap:12px}
+.nav-btn{padding:10px 24px;border-radius:30px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;transition:all .3s;white-space:nowrap}
+#btn-prev{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)}
+#btn-prev:disabled{opacity:.35;cursor:default}
+#btn-next{background:var(--acento);color:#fff}
+#btn-next:hover:not(:disabled){background:#d14a16}
+#btn-next:disabled{background:rgba(255,255,255,.15);color:rgba(255,255,255,.35);cursor:default}
+#slide-dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s}
+.dot.active{background:var(--acento);transform:scale(1.3)}.dot.done{background:rgba(255,255,255,.55)}
+.slide-cover{background:linear-gradient(135deg,var(--azul) 0%,#0D2340 50%,#1A1A2E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 32px;min-height:100%}
+.cover-badge{background:var(--acento);color:#fff;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:14px;display:inline-block}
+.cover-module{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:4px}
+.cover-clause{font-size:13px;font-weight:700;color:var(--amarillo);letter-spacing:.06em;margin-bottom:8px}
+.cover-title{font-family:'DM Serif Display',serif;font-size:clamp(22px,4vw,40px);color:#fff;line-height:1.15;margin-bottom:12px;max-width:780px}
+.cover-subtitle{font-size:14px;color:rgba(255,255,255,.65);max-width:600px;line-height:1.7;margin-bottom:18px}
+.cover-meta{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.meta-item{font-size:12.5px;color:rgba(255,255,255,.55)}
+.cover-obj{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px 20px;text-align:left;max-width:680px;width:100%}
+.cover-obj h3{font-size:11px;font-weight:700;color:var(--acento);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
+.cover-obj li{list-style:none;font-size:13px;color:rgba(255,255,255,.75);padding:3px 0 3px 16px;position:relative;line-height:1.5}
+.cover-obj li::before{content:"→";position:absolute;left:0;color:var(--acento);font-weight:700}
+.slide-concept{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 32px;min-height:100%;background:var(--azul-mid)}
+.concept-icon{font-size:50px;margin-bottom:14px;line-height:1}
+.concept-tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:7px}
+.concept-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,3.5vw,34px);color:#fff;margin-bottom:13px;max-width:700px;line-height:1.2}
+.concept-body{font-size:14.5px;color:rgba(255,255,255,.82);max-width:640px;line-height:1.8;margin-bottom:18px}
+.concept-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pill{background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);font-size:13px;font-weight:500;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.18)}
+.slide-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 32px;min-height:100%;background:linear-gradient(135deg,#0f2d5a 0%,#1a3a5c 100%)}
+.stat-ey{font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--acento);margin-bottom:11px}
+.stat-num{font-family:'DM Serif Display',serif;font-size:clamp(52px,9vw,90px);color:#fff;line-height:1;margin-bottom:5px}
+.stat-unit{font-size:17px;color:rgba(255,255,255,.6);font-weight:300;margin-bottom:15px}
+.stat-desc{font-size:15px;color:rgba(255,255,255,.8);max-width:560px;line-height:1.75;margin-bottom:20px}
+.stat-src{font-size:11px;color:rgba(255,255,255,.35)}
+.stat-cards{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;max-width:760px;margin-top:16px}
+.sc-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 16px;text-align:left;flex:1;min-width:140px}
+.sc-n{font-family:'DM Serif Display',serif;font-size:24px;color:var(--amarillo);line-height:1}
+.sc-l{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;line-height:1.4}
+.slide-content{background:var(--gris-claro);padding:26px;min-height:100%;display:flex;flex-direction:column}
+.content-header{background:var(--azul);border-radius:12px 12px 0 0;margin:-26px -26px 18px;padding:15px 22px}
+.ch-ey{font-size:11px;font-weight:700;color:var(--acento);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.ch-ti{font-family:'DM Serif Display',serif;font-size:clamp(14px,2.3vw,21px);color:#fff}
+.content-body{flex:1}
+.ct{width:100%;border-collapse:collapse;font-size:12.5px}
+.ct th{background:var(--azul);color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:11px}
+.ct th:first-child{border-radius:7px 0 0 0}.ct th:last-child{border-radius:0 7px 0 0}
+.ct td{padding:8px 10px;border-bottom:1px solid #dde3ee;vertical-align:top;line-height:1.55;color:var(--texto)}
+.ct tr:nth-child(even) td{background:rgba(37,99,168,.03)}.ct tr:last-child td{border-bottom:none}
+.tv{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:8px}
+.tv-g{background:#d4f0e1;color:var(--verde)}.tv-b{background:#dde8f5;color:var(--azul-mid)}
+.tv-a{background:#fde8df;color:var(--acento)}.tv-y{background:#fef3d6;color:#a06b00}
+.tv-r{background:#fdecea;color:var(--rojo)}.tv-p{background:#ede0f5;color:var(--morado)}
+.slide-accordion{background:var(--gris-claro);padding:22px 26px;min-height:100%;display:flex;flex-direction:column}
+.acc-hd{text-align:center;margin-bottom:14px}
+.acc-ey{font-size:11px;font-weight:700;color:var(--azul-mid);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.acc-ti{font-family:'DM Serif Display',serif;font-size:clamp(15px,2.5vw,21px);color:var(--azul);margin-bottom:3px}
+.acc-su{font-size:12px;color:var(--gris-medio)}
+.acc-list{display:flex;flex-direction:column;gap:6px;flex:1}
+.acc-item{background:#fff;border-radius:9px;border:1.5px solid #dde3ee;overflow:hidden;transition:all .3s}
+.acc-item.open{border-color:var(--azul-mid)}
+.acc-trigger{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;background:none;border:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+.acc-num{width:25px;height:25px;border-radius:50%;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s}
+.acc-item.open .acc-num{background:var(--acento)}
+.acc-label{font-size:13px;font-weight:600;color:var(--azul);flex:1}
+.acc-arrow{font-size:10px;color:var(--gris-medio);transition:transform .3s}
+.acc-item.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .4s}
+.acc-item.open .acc-body{max-height:600px}
+.acc-content{padding:0 13px 11px 50px;font-size:12.5px;color:var(--texto);line-height:1.7}
+.acc-content ul{list-style:none;margin-top:4px}
+.acc-content li{padding:2px 0 2px 12px;position:relative}
+.acc-content li::before{content:"·";position:absolute;left:0;color:var(--acento);font-weight:900;font-size:14px;line-height:1.2}
+.slide-reveal{background:var(--gris-claro);padding:20px 24px;min-height:100%;display:flex;flex-direction:column}
+.rv-hd{text-align:center;margin-bottom:13px}
+.rv-ey{font-size:11px;font-weight:700;color:var(--azul-mid);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.rv-ti{font-family:'DM Serif Display',serif;font-size:clamp(15px,2.4vw,21px);color:var(--azul);margin-bottom:3px}
+.rv-su{font-size:12px;color:var(--gris-medio)}
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;flex:1}
+.flip-card{perspective:800px;cursor:pointer;min-height:135px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:13px;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flip-front{background:var(--azul)}
+.ff-icon{font-size:26px;margin-bottom:7px}.ff-title{font-size:12.5px;font-weight:600;color:#fff;line-height:1.3}
+.ff-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px}
+.flip-back{background:#fff;border:2px solid var(--azul-mid);transform:rotateY(180deg)}
+.fb-text{font-size:11.5px;color:var(--texto);line-height:1.6}
+.flip-hint{text-align:center;margin-top:9px;font-size:11px;color:var(--gris-medio)}
+.slide-case{background:var(--gris-claro);padding:18px 22px;min-height:100%;display:flex;flex-direction:column}
+.case-hdr{background:linear-gradient(135deg,var(--azul),#0f2347);border-radius:12px;padding:13px 17px;margin-bottom:11px;flex-shrink:0}
+.case-bdg{font-size:11px;font-weight:700;color:var(--amarillo);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.case-ttl{font-family:'DM Serif Display',serif;font-size:clamp(13px,2vw,18px);color:#fff;line-height:1.3}
+.case-tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;flex-shrink:0}
+.case-tab{padding:5px 12px;border-radius:17px;border:1.5px solid #dde3ee;background:#fff;font-size:12px;font-weight:500;color:var(--gris-medio);cursor:pointer;transition:all .3s}
+.case-tab.active{background:var(--azul-mid);color:#fff;border-color:var(--azul-mid)}
+.case-pnl{display:none;flex:1;overflow-y:auto}.case-pnl.active{display:block}
+.c-st{font-size:11px;font-weight:700;color:var(--azul-mid);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.c-tx{font-size:13px;color:var(--texto);line-height:1.75;margin-bottom:8px}
+.c-hl{background:#fff;border-left:4px solid var(--acento);border-radius:0 8px 8px 0;padding:9px 12px;font-size:13px;color:var(--texto);line-height:1.6;margin:6px 0}
+.slide-quiz{background:var(--gris-claro);padding:22px 26px;min-height:100%;display:flex;flex-direction:column}
+.quiz-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.quiz-bdg{background:var(--azul-mid);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:17px;letter-spacing:.1em;white-space:nowrap}
+.quiz-prog{font-size:12.5px;color:var(--gris-medio)}
+.quiz-q{font-family:'DM Serif Display',serif;font-size:clamp(15px,2.3vw,21px);color:var(--azul);margin-bottom:15px;line-height:1.4;max-width:720px}
+.quiz-opts{display:flex;flex-direction:column;gap:7px;max-width:720px}
+.quiz-opt{background:#fff;border:2px solid #dde3ee;border-radius:9px;padding:10px 13px;cursor:pointer;text-align:left;font-family:'Inter',sans-serif;font-size:13px;color:var(--texto);transition:all .3s;display:flex;align-items:center;gap:9px}
+.quiz-opt:hover:not(:disabled){border-color:var(--azul-mid);background:#f0f5fb}
+.opt-l{width:24px;height:24px;border-radius:50%;background:var(--gris-claro);border:2px solid #cdd3dd;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gris-medio);flex-shrink:0;transition:all .3s}
+.quiz-opt.correct{border-color:var(--verde)!important;background:#e8f7ef!important}
+.quiz-opt.correct .opt-l{background:var(--verde)!important;border-color:var(--verde)!important;color:#fff!important}
+.quiz-opt.wrong{border-color:var(--rojo)!important;background:#fdecea!important}
+.quiz-opt.wrong .opt-l{background:var(--rojo)!important;border-color:var(--rojo)!important;color:#fff!important}
+.quiz-opt.disabled{cursor:default}
+.quiz-fb{margin-top:12px;padding:10px 13px;border-radius:9px;font-size:12.5px;line-height:1.6;display:none;max-width:720px}
+.quiz-fb.show{display:block}
+.fb-ok{background:#e8f7ef;border-left:4px solid var(--verde);color:#1a5c38}
+.fb-fail{background:#fdecea;border-left:4px solid var(--rojo);color:#7a1a1a}
+.quiz-must{font-size:12px;color:var(--acento);font-weight:600;margin-top:7px;display:none;max-width:720px}
+.quiz-must.show{display:block}
+.slide-result{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 28px;min-height:100%;background:linear-gradient(135deg,var(--azul) 0%,#0D2340 100%)}
+.res-icon{font-size:54px;margin-bottom:12px;line-height:1}
+.res-ti{font-family:'DM Serif Display',serif;font-size:clamp(20px,3.5vw,32px);color:#fff;margin-bottom:6px}
+.res-sc{font-family:'DM Serif Display',serif;font-size:clamp(44px,7vw,68px);line-height:1;margin:6px 0}
+.res-su{font-size:13.5px;color:rgba(255,255,255,.65);margin-bottom:15px;max-width:500px;line-height:1.7}
+.res-bk{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.rb{text-align:center}.rb-n{font-family:'DM Serif Display',serif;font-size:26px;color:#fff}
+.rb-l{font-size:11.5px;color:rgba(255,255,255,.5);margin-top:2px}
+.res-msg{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px 17px;max-width:560px;font-size:13px;color:rgba(255,255,255,.8);line-height:1.7}
+.btn-retry{margin-top:13px;background:var(--acento);color:#fff;border:none;border-radius:27px;padding:10px 23px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer}</style></head><body>
+<div id="shell">
+  <div id="progress-wrap"><div id="progress-bar"></div></div>
+  <div id="topbar"><div id="course-label">ISO/IEC 42001:2023 — Lead Auditor &amp; Implementer · PT-BR</div><div id="slide-counter">1 / 11</div></div>
+  <div id="stage"><div class="slide slide-cover active" data-index="0">
+<div class="cover-badge">Módulo 8 de 12</div>
+<div class="cover-module">ISO/IEC 42001:2023 · Lead Auditor &amp; Implementer · PT-BR</div>
+<div class="cover-clause">Cláusula 10 — Melhoria Contínua</div>
+<h1 class="cover-title">O Ciclo que Nunca Para:<br>NCs, Ações Corretivas e Melhoria Proativa no Brasil</h1>
+<p class="cover-subtitle">A cláusula 10 fecha o ciclo PDCA do SGSIA. No Brasil, as NCs mais frequentes envolvem discriminação racial em sistemas de crédito e emprego — com implicações que vão além da NC de gestão, chegando a riscos legais sob a LGPD e a Lei do Racismo (7.716/1989).</p>
+<div class="cover-meta"><span class="meta-item">⏱ 45 min</span><span class="meta-item">12 slides · 4 questões</span></div>
+<div class="cover-obj"><h3>Objetivos</h3><ul><li>Distinguir correção, ação corretiva e melhoria contínua no contexto do SGSIA</li><li>Executar o processo de ação corretiva de ponta a ponta (cláusula 10.1)</li><li>Identificar as NCs mais frequentes em auditorias ISO 42001 no Brasil</li><li>Projetar programa de melhoria contínua alinhado com a regulação brasileira</li><li>Conectar a cláusula 10 com as demais cláusulas no ciclo de retroalimentação do SGSIA</li></ul></div></div><div class="slide slide-concept" data-index="1">
+<div class="concept-icon">🔄</div><div class="concept-tag">Cláusula 10 · Conceito</div>
+<h2 class="concept-title">NC no SGSIA brasileiro: pode ser discriminação — não apenas incumprimento</h2><p class="concept-body">No contexto do SGSIA brasileiro, uma NC pode vir de três fontes: (1) <strong style='color:#fff'>Auditoria interna ou externa</strong> — incumprimento de requisito da norma. (2) <strong style='color:#fff'>Incidente de IA</strong> — sistema produz comportamento discriminatório em produção. (3) <strong style='color:#fff'>Retroalimentação de partes interessadas</strong> — reclamação de titular via LGPD Art. 20, autuação da ANPD, ou ação do Ministério Público. No Brasil, uma NC de viés racial pode ativar não apenas a cláusula 10.1 do SGSIA, mas também o Art. 20 da LGPD e eventualmente a Lei 7.716/1989 (Lei do Racismo).</p>
+<div class="concept-pills"><span class="pill">10.1 NC + Ação corretiva</span><span class="pill">10.2 Melhoria contínua</span><span class="pill">LGPD Art. 20</span><span class="pill">Causa raiz obrigatória</span><span class="pill">Verificação de eficácia</span></div></div><div class="slide slide-accordion" data-index="2">
+<div class="acc-hd"><div class="acc-ey">Cláusula 10.1 · Processo</div><h2 class="acc-ti">O processo de ação corretiva do SGSIA — 6 passos obrigatórios</h2><p class="acc-su">A cláusula 10.1 exige que a organização reaja a não conformidades de forma específica e documentada</p></div>
+<div class="acc-list"><div class="acc-item open">
+<button class="acc-trigger" onclick="toggleAcc(this)">
+<div class="acc-num">1</div><span class="acc-label">Reagir à NC e tomar correção imediata</span><span class="acc-arrow">▼</span>
+</button><div class="acc-body"><div class="acc-content">Parar o dano ou limitar o impacto. Para incidentes de viés racial: colocar o sistema em modo de revisão humana para os grupos afetados. Notificar os afetados conforme LGPD.
+<ul><li>Para discriminação racial em crédito: revisão manual de todos os casos afetados no período</li>
+<li>Prazo: imediato para incidentes de alto impacto sobre grupos vulneráveis</li>
+<li>No Brasil: avaliar se o incidente aciona notificação à ANPD</li></ul></div></div></div><div class="acc-item">
+<button class="acc-trigger" onclick="toggleAcc(this)">
+<div class="acc-num">2</div><span class="acc-label">Avaliar a necessidade de ação corretiva</span><span class="acc-arrow">▼</span>
+</button><div class="acc-body"><div class="acc-content">Por que aconteceu? Pode se repetir? Está acontecendo em outros sistemas?
+<ul><li>Ferramenta: análise de causa raiz (5-Porquês, Ishikawa)</li>
+<li>Se a causa é sistêmica (ex: processo de validação sem verificação de proxy racial) → ação corretiva obrigatória</li>
+<li>No Brasil: verificar se outros sistemas têm a mesma causa raiz</li></ul></div></div></div><div class="acc-item">
+<button class="acc-trigger" onclick="toggleAcc(this)">
+<div class="acc-num">3</div><span class="acc-label">Implementar a ação corretiva</span><span class="acc-arrow">▼</span>
+</button><div class="acc-body"><div class="acc-content">Eliminar a causa raiz. Para viés de IA: retraining com dados corrigidos, modificação do processo de validação.
+<ul><li>Atribuir responsável e prazo desde o início</li>
+<li>Atualizar documentos afetados: Risk Register, AIIA, procedimentos</li>
+<li>No Brasil: para viés racial — considerar programa de reparação para afetados além da correção técnica</li></ul></div></div></div><div class="acc-item">
+<button class="acc-trigger" onclick="toggleAcc(this)">
+<div class="acc-num">4</div><span class="acc-label">Revisar a eficácia da ação corretiva</span><span class="acc-arrow">▼</span>
+</button><div class="acc-body"><div class="acc-content">Verificar que a ação realmente eliminou a causa raiz e que a NC não se repete.
+<ul><li>Para viés racial: métricas de fairness pós-retraining por pelo menos 3 meses em produção</li>
+<li>No Brasil: verificar se o canal LGPD Art. 20 continua recebendo reclamações do mesmo tipo</li>
+<li>NC não fechada = evidência de melhoria contínua incompleta na próxima auditoria</li></ul></div></div></div><div class="acc-item">
+<button class="acc-trigger" onclick="toggleAcc(this)">
+<div class="acc-num">5</div><span class="acc-label">Atualizar riscos se necessário</span><span class="acc-arrow">▼</span>
+</button><div class="acc-body"><div class="acc-content">Se a NC revelou um risco não identificado no AI Risk Assessment, atualizar o Registro de Riscos e a AIIA.
+<ul><li>Um incidente de viés racial pode revelar grupos afetados não considerados na AIIA original</li>
+<li>Atualizar o SoA se o incidente evidenciou que um controle declarado não era suficiente</li></ul></div></div></div><div class="acc-item">
+<button class="acc-trigger" onclick="toggleAcc(this)">
+<div class="acc-num">6</div><span class="acc-label">Conservar informação documentada</span><span class="acc-arrow">▼</span>
+</button><div class="acc-body"><div class="acc-content">Todo o processo documentado: natureza da NC, ações tomadas, resultados da revisão de eficácia.
+<ul><li>Para NCs com implicação LGPD: reter pelo prazo de defesa legal (mínimo 5 anos)</li>
+<li>O auditor externo revisará o histórico de NCs e ações corretivas do ciclo</li></ul></div></div></div></div></div><div class="slide slide-quiz" data-index="3" data-quiz="true" data-correct="2">
+<div class="quiz-hdr"><span class="quiz-bdg">QUESTÃO 1 / 4</span><span class="quiz-prog">PT-BR · Avaliação</span></div>
+<p class="quiz-q">Um sistema de IA de crédito produz uma decisão de recusa que é detectada por um analista e revertida manualmente antes de chegar ao cliente. O analista registra a reversão no sistema de tickets. A empresa considera o caso encerrado. Isso é suficiente sob a cláusula 10.1?</p><div class="quiz-opts"><button class="quiz-opt" onclick="answer(this,0,3)"><span class="opt-l">A</span>Sim — a correção manual é suficiente porque o cliente não foi afetado</button><button class="quiz-opt" onclick="answer(this,1,3)"><span class="opt-l">B</span>Sim — o registro no sistema de tickets cumpre o requisito de informação documentada</button><button class="quiz-opt" onclick="answer(this,2,3)"><span class="opt-l">C</span>Não — a cláusula 10.1 exige avaliar a causa raiz do erro. Se o modelo está produzindo decisões erradas sistematicamente, especialmente com padrão de discriminação racial, a correção pontual não elimina o problema. Deve-se iniciar análise de causa raiz e, se sistêmica, ação corretiva</button><button class="quiz-opt" onclick="answer(this,3,3)"><span class="opt-l">D</span>Não — qualquer erro do sistema deve ser imediatamente notificado à ANPD</button></div>
+<div id="fb-3" class="quiz-fb"></div>
+<div id="must-3" class="quiz-must">⚠ Selecione uma resposta antes de continuar</div></div><div class="slide slide-content" data-index="4">
+<div class="content-header"><div class="ch-ey">NCs mais frequentes · ISO 42001 no Brasil</div><h2 class="ch-ti">Não conformidades mais comuns em auditorias de ISO 42001 no Brasil</h2></div>
+<div class="content-body"><table class="ct"><thead><tr><th>NC frequente</th><th>Cláusula</th><th>Causa raiz típica</th><th>Ação corretiva habitual</th></tr></thead><tbody><tr><td>AIIA sem análise de impacto racial</td><td><span class='tv tv-b'>6.1.4</span></td><td>Equipe confunde AIIA com Risk Assessment; análise racial vista como 'sensível'</td><td>Atualizar AIIA com análise de paridade demográfica por raça, gênero e região</td></tr><tr><td>Canal LGPD Art. 20 não operacional</td><td><span class='tv tv-b'>A.8.5</span></td><td>Canal mencionado na política mas não implementado ou não acessível</td><td>Criar canal específico publicado + procedimento de resposta com SLA de 15 dias</td></tr><tr><td>Testes sem fairness testing racial</td><td><span class='tv tv-b'>A.6.5</span></td><td>Equipe técnica mede apenas desempenho global, não paridade demográfica</td><td>Adicionar fairness testing como etapa obrigatória no checklist de deploy</td></tr><tr><td>Alta direção não conhece riscos de IA</td><td><span class='tv tv-b'>5.1</span></td><td>Política de IA não comunicada efetivamente à direção</td><td>Sessão de briefing para o Conselho + métricas de IA na pauta trimestral</td></tr><tr><td>NCs de auditoria interna sem ação corretiva</td><td><span class='tv tv-b'>9.2+10.1</span></td><td>NCs registradas mas sem processo de acompanhamento até fechamento</td><td>Registro de ações corretivas com responsável, prazo e revisão pela direção</td></tr><tr><td>Contratos com fornecedores de IA sem cláusulas de governança</td><td><span class='tv tv-b'>A.10.2</span></td><td>Contratos firmados antes do SGSIA sem aditamento</td><td>Aditamento com fornecedores ativos + cláusulas em novos contratos</td></tr><tr><td>Logs de inferência sem período de retenção definido</td><td><span class='tv tv-b'>7.5+LGPD</span></td><td>Logs criados sem política de retenção alinhada com LGPD</td><td>Definir política de retenção por tipo de dado e prazo legal aplicável</td></tr></tbody></table></div></div><div class="slide slide-quiz" data-index="5" data-quiz="true" data-correct="1">
+<div class="quiz-hdr"><span class="quiz-bdg">QUESTÃO 2 / 4</span><span class="quiz-prog">PT-BR · Avaliação</span></div>
+<p class="quiz-q">A cláusula 10.1.f) exige revisar a eficácia das ações corretivas. No caso de incidente de viés racial em sistema de crédito, qual evidência demonstraria que a ação corretiva foi EFICAZ?</p><div class="quiz-opts"><button class="quiz-opt" onclick="answer(this,0,5)"><span class="opt-l">A</span>O modelo foi retrined e colocado de volta em produção</button><button class="quiz-opt" onclick="answer(this,1,5)"><span class="opt-l">B</span>Métricas de fairness do modelo retrined mostrando paridade demográfica (ratio 0,90-1,10 entre negros e brancos) mantida por pelo menos 3 meses em produção, com zero reclamações do mesmo tipo no canal LGPD Art. 20</button><button class="quiz-opt" onclick="answer(this,2,5)"><span class="opt-l">C</span>Um relatório interno da equipe técnica declarando que o problema foi corrigido</button><button class="quiz-opt" onclick="answer(this,3,5)"><span class="opt-l">D</span>Ausência de novas reclamações de clientes no mês seguinte ao retraining</button></div>
+<div id="fb-5" class="quiz-fb"></div>
+<div id="must-5" class="quiz-must">⚠ Selecione uma resposta antes de continuar</div></div><div class="slide slide-reveal" data-index="6">
+<div class="rv-hd"><div class="rv-ey">Cláusula 10.2 · Fontes de melhoria</div><h2 class="rv-ti">Fontes de melhoria contínua do SGSIA no contexto brasileiro</h2><p class="rv-su">Clique para ver como cada fonte gera oportunidades de melhoria proativa no Brasil</p></div>
+<div class="flip-grid"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+<div class="flip-front"><div class="ff-icon">🔍</div><div class="ff-title">Auditorias internas</div><div class="ff-hint">Toque para ver</div></div>
+<div class="flip-back"><div class="fb-text">Observações (não apenas NCs) são oportunidades de melhoria. Um canal LGPD Art. 20 com SLA de 20 dias úteis é candidato à melhoria mesmo sem NC.</div></div></div></div><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+<div class="flip-front"><div class="ff-icon">📊</div><div class="ff-title">Métricas do SGSIA</div><div class="ff-hint">Toque para ver</div></div>
+<div class="flip-back"><div class="fb-text">Tendência de piora na paridade demográfica ANTES de atingir o limiar de alerta é oportunidade de melhoria proativa — agir antes da NC.</div></div></div></div><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+<div class="flip-front"><div class="ff-icon">⚖️</div><div class="ff-title">Mudanças regulatórias</div><div class="ff-hint">Toque para ver</div></div>
+<div class="flip-back"><div class="fb-text">PL 2338/2023 aprovação na Câmara, novas resoluções da ANPD, atualizações do BACEN para modelos de IA — todas exigem adaptação proativa do SGSIA.</div></div></div></div><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+<div class="flip-front"><div class="ff-icon">💬</div><div class="ff-title">Feedback de partes int.</div><div class="ff-hint">Toque para ver</div></div>
+<div class="flip-back"><div class="fb-text">Reclamações de titulares via LGPD Art. 20, questionamentos de clientes B2B sobre fairness, pedidos de transparência de investidores — sinais antes que virem NCs.</div></div></div></div><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+<div class="flip-front"><div class="ff-icon">🌐</div><div class="ff-title">Incidentes no setor</div><div class="ff-hint">Toque para ver</div></div>
+<div class="flip-back"><div class="fb-text">Um banco sofreu autuação da ANPD por viés racial em scoring. A empresa usa metodologia similar? Aprender com casos públicos antes de sofrer o mesmo.</div></div></div></div><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+<div class="flip-front"><div class="ff-icon">🔬</div><div class="ff-title">Avanços técnicos</div><div class="ff-hint">Toque para ver</div></div>
+<div class="flip-back"><div class="fb-text">Novas técnicas de fairness para dados brasileiros, ou novas ferramentas de explicabilidade que facilitam o cumprimento do LGPD Art. 20.</div></div></div></div></div><div class="flip-hint">Clique em cada card para ver</div></div><div class="slide slide-quiz" data-index="7" data-quiz="true" data-correct="3">
+<div class="quiz-hdr"><span class="quiz-bdg">QUESTÃO 3 / 4</span><span class="quiz-prog">PT-BR · Avaliação</span></div>
+<p class="quiz-q">Na cláusula 10.1, qual é a diferença entre 'correção' e 'ação corretiva'?</p><div class="quiz-opts"><button class="quiz-opt" onclick="answer(this,0,7)"><span class="opt-l">A</span>Não há diferença — os dois termos são sinônimos na ISO 42001</button><button class="quiz-opt" onclick="answer(this,1,7)"><span class="opt-l">B</span>A correção é mais urgente; a ação corretiva pode aguardar a próxima auditoria</button><button class="quiz-opt" onclick="answer(this,2,7)"><span class="opt-l">C</span>A ação corretiva aplica-se apenas a NCs maiores; a correção a NCs menores</button><button class="quiz-opt" onclick="answer(this,3,7)"><span class="opt-l">D</span>A correção elimina o sintoma (corrige o caso concreto); a ação corretiva elimina a causa raiz (evita que o problema se repita). No Brasil para discriminação racial em IA: correção = revisar os casos afetados; ação corretiva = corrigir o processo de validação de dados que permitiu o proxy racial</button></div>
+<div id="fb-7" class="quiz-fb"></div>
+<div id="must-7" class="quiz-must">⚠ Selecione uma resposta antes de continuar</div></div><div class="slide slide-case" data-index="8">
+<div class="case-hdr"><div class="case-bdg">📋 Caso integrador · Cláusula 10 + PDCA</div><h2 class="case-ttl">Totvs: Da NC de viés de gênero à melhoria proativa — Um ano completo do ciclo PDCA</h2></div>
+<div class="case-tabs"><button class="case-tab active" onclick="switchCase(this,'nc')">NC detectada</button><button class="case-tab" onclick="switchCase(this,'causa')">Causa raiz</button><button class="case-tab" onclick="switchCase(this,'melhoria')">Melhoria proativa</button></div><div class="case-pnl active" id="cp-nc"><div class='c-st'>Incidente — sistema de triagem de currículos com viés de gênero</div>
+<p class='c-tx'>O sistema de triagem de currículos da Totvs mostrou na auditoria trimestral de fairness (janeiro/2026) taxa de aprovação 26% menor para mulheres em posições de tecnologia, com qualificações equivalentes.</p>
+<div class='c-hl'>⚠ <strong>NC (A.6.8 + A.5.3):</strong> Dashboard de monitoramento sem limiar de alerta para paridade de gênero. O viés estava presente há 2 trimestres sem detecção. Correção imediata: revisão manual de 12.400 currículos femininos recusados nos últimos 6 meses.</div></div><div class="case-pnl" id="cp-causa"><div class='c-st'>Análise de causa raiz (5-Porquês)</div>
+<div class='c-hl'><strong>Causa raiz:</strong> Dados de treinamento (2019-2022) tinham 82% de homens em posições de tecnologia. O modelo aprendeu a proporção histórica como padrão. O processo de preparação de dados (A.6.4) não incluía balanceamento de gênero para posições historicamente masculinizadas.</div>
+<div class='c-hl'><strong>Ação corretiva:</strong> (1) Retraining com dataset balanceado por gênero. (2) Adição de limiar de alerta de paridade de gênero no dashboard (A.6.8). (3) Notificação às 3.000 empresas clientes sobre atualização do modelo (A.10.4).</div></div><div class="case-pnl" id="cp-melhoria"><div class='c-st'>Melhoria proativa derivada (meses seguintes)</div>
+<div class='c-hl'>✅ <strong>Melhoria 1:</strong> A NC revelou que o dashboard não monitorava gênero separadamente. A Totvs estendeu para monitorar paridade por raça, gênero, idade e PCD para todos os sistemas de triagem — superando o requisito mínimo do A.6.8.</div>
+<div class='c-hl'>✅ <strong>Melhoria 2:</strong> Criação de Comitê de Ética em IA com representação feminina, negra e de PCD para revisar critérios de fairness antes de cada retraining. Documentado como prática de melhoria contínua (§ 10.2).</div>
+<div class='c-hl'>🏆 <strong>Resultado na auditoria de vigilância:</strong> O auditor destacou a Totvs como referência de maturidade do SGSIA: NC virou melhoria proativa que fortaleceu 4 controles do Anexo A e antecipou requisitos do PL 2338/2023.</div></div></div><div class="slide slide-quiz" data-index="9" data-quiz="true" data-correct="0">
+<div class="quiz-hdr"><span class="quiz-bdg">QUESTÃO 4 / 4</span><span class="quiz-prog">PT-BR · Avaliação</span></div>
+<p class="quiz-q">Qual é a diferença entre 'melhoria contínua' (cláusula 10.2) e 'ação corretiva' (cláusula 10.1) na ISO 42001?</p><div class="quiz-opts"><button class="quiz-opt" onclick="answer(this,0,9)"><span class="opt-l">A</span>A ação corretiva reage a NCs existentes; a melhoria contínua busca proativamente aumentar a adequação e eficácia do SGSIA mesmo sem NCs — no Brasil, isso inclui antecipar requisitos do PL 2338/2023 durante o período de vacância antes de sua aprovação</button><button class="quiz-opt" onclick="answer(this,1,9)"><span class="opt-l">B</span>Não há diferença prática — ambos eliminam causas raiz de problemas</button><button class="quiz-opt" onclick="answer(this,2,9)"><span class="opt-l">C</span>A melhoria contínua é obrigatória apenas no terceiro ano do ciclo de certificação</button><button class="quiz-opt" onclick="answer(this,3,9)"><span class="opt-l">D</span>A ação corretiva é para NCs maiores; a melhoria contínua para NCs menores</button></div>
+<div id="fb-9" class="quiz-fb"></div>
+<div id="must-9" class="quiz-must">⚠ Selecione uma resposta antes de continuar</div></div><div class="slide slide-result" data-index="10">
+<div class="res-icon" id="res-icon">🎯</div>
+<h2 class="res-ti" id="res-ti">Resultado do Módulo</h2>
+<div class="res-sc" id="res-sc" style="color:var(--amarillo)">—</div>
+<p class="res-su" id="res-sub"></p>
+<div class="res-bk">
+<div class="rb"><div class="rb-n" id="rb-c">—</div><div class="rb-l">Corretas</div></div>
+<div class="rb"><div class="rb-n" id="rb-w">—</div><div class="rb-l">Incorretas</div></div>
+<div class="rb"><div class="rb-n" id="rb-t">4</div><div class="rb-l">Total</div></div>
+</div>
+<div class="res-msg" id="res-msg"></div>
+<button class="btn-retry" id="btn-retry" style="display:none" onclick="retryQuiz()">🔄 Rever e tentar novamente</button></div></div>
+  <div id="navbar">
+    <button class="nav-btn" id="btn-prev" onclick="navigate(-1)" disabled>← Anterior</button>
+    <div id="slide-dots"></div>
+    <button class="nav-btn" id="btn-next" onclick="navigate(1)">Próximo →</button>
+  </div>
+</div>
+<script>function findAPI(w){var t=0;while(!w.API&&t<7&&w.parent&&w.parent!=w){w=w.parent;t++;}return w.API||null;}
+var scormAPI=findAPI(window);
+function lms(fn,...a){if(scormAPI){try{return scormAPI[fn](...a)}catch(e){}}return null;}
+lms('LMSInitialize','');lms('LMSSetValue','cmi.core.lesson_status','incomplete');lms('LMSSetValue','cmi.core.lesson_location','0');
+function initDots(){const el=document.getElementById('slide-dots');for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);el.appendChild(d);}}
+function updUI(){document.querySelectorAll('.dot').forEach((d,i)=>{d.className='dot'+(i===C?' active':(i<C?' done':''));});document.getElementById('progress-bar').style.width=(((C+1)/TOTAL)*100)+'%';document.getElementById('slide-counter').textContent=(C+1)+' / '+TOTAL;lms('LMSSetValue','cmi.core.lesson_location',String(C));}
+function navigate(dir){const t=C+dir;if(t<0||t>=TOTAL)return;if(dir>0&&QS.includes(C)&&!QA[C]){document.getElementById('must-'+C).classList.add('show');return;}goTo(t);}
+function goTo(idx){if(idx<0||idx>=TOTAL)return;const sl=document.querySelectorAll('.slide');sl[C].classList.remove('active');sl[C].classList.add('exit-left');setTimeout(()=>sl[C].classList.remove('exit-left'),460);C=idx;sl[C].classList.add('active');document.getElementById('btn-prev').disabled=(C===0);document.getElementById('btn-next').disabled=(C===TOTAL-1)||(QS.includes(C)&&!QA[C]);updUI();if(C===TOTAL-1)showResult();}
+function answer(btn,chosen,si){if(QA[si])return;QA[si]=true;const correct=QC[si];btn.closest('.quiz-opts').querySelectorAll('.quiz-opt').forEach((o,i)=>{o.disabled=true;o.classList.add('disabled');if(i===correct)o.classList.add('correct');if(i===chosen&&chosen!==correct)o.classList.add('wrong');});const ok=(chosen===correct);QSC[si]=ok;const fb=document.getElementById('fb-'+si);fb.textContent=ok?FB[si].ok:FB[si].fail;fb.className='quiz-fb show '+(ok?'fb-ok':'fb-fail');document.getElementById('must-'+si).classList.remove('show');document.getElementById('btn-next').disabled=false;}
+function showResult(){const vals=Object.values(QSC),c=vals.filter(Boolean).length,t=Object.keys(QC).length,pct=Math.round((c/t)*100),passed=pct>=70;document.getElementById('res-icon').textContent=passed?'🏆':'📚';document.getElementById('res-ti').textContent=passed?'Módulo concluído!':'Revise o conteúdo';document.getElementById('res-sc').textContent=pct+'%';document.getElementById('res-sc').style.color=passed?'#2ecc71':'var(--amarillo)';document.getElementById('rb-c').textContent=c;document.getElementById('rb-w').textContent=t-c;document.getElementById('rb-t').textContent=t;document.getElementById('res-sub').textContent=passed?'Você acertou '+c+'/'+t+' questões.':'Acertou '+c+'/'+t+'. Precisa de 70% para avançar.';document.getElementById('res-msg').innerHTML=passed?NEXT_MSG:RETRY_MSG;if(!passed)document.getElementById('btn-retry').style.display='inline-block';lms('LMSSetValue','cmi.core.score.raw',String(pct));lms('LMSSetValue','cmi.core.lesson_status',passed?'passed':'failed');lms('LMSFinish','');}
+function retryQuiz(){goTo(0);}
+function toggleAcc(btn){btn.closest('.acc-item').classList.toggle('open');}
+function switchCase(btn,id){document.querySelectorAll('.case-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.case-pnl').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('cp-'+id).classList.add('active');}
+var C=0,TOTAL=11,QS=[3, 5, 7, 9],QA={3:false,5:false,7:false,9:false},QC={3:2,5:1,7:3,9:0},QSC={3:false,5:false,7:false,9:false},FB={3:{ok:'✅ Correto. A cláusula 10.1 distingue correção de ação corretiva. A correção resolve o caso concreto; a ação corretiva elimina a causa raiz. A empresa deve avaliar: por que o modelo produziu esse erro? É sistemático? Há padrão de discriminação racial? Sem essa análise, o problema continuará ocorrendo.',fail:'❌ Incorreto. A correção manual resolve o caso concreto, mas a cláusula 10.1 exige avaliar a necessidade de ação corretiva. Se o modelo está produzindo erros sistematicamente — especialmente com padrão discriminatório — a correção pontual não é suficiente.'},5:{ok:'✅ Correto. A verificação de eficácia de ação corretiva de viés racial requer evidências quantitativas em produção: métricas de fairness mostrando que o viés foi eliminado de forma sustentada (3 meses mínimo). Relatório interno declarando que o problema foi resolvido não é evidência suficiente.',fail:'❌ Incorreto. Relatório interno ou ausência de reclamações a curto prazo não são evidências robustas de eficácia. São necessárias métricas de fairness em produção por período representativo (3 meses mínimo), demonstrando que a paridade demográfica foi restaurada e se mantém.'},7:{ok:'✅ Correto. Esta é a distinção fundamental em qualquer sistema de gestão ISO. A correção resolve o sintoma imediato. A ação corretiva vai além: elimina a causa raiz. Para discriminação racial em IA brasileira: correção = revisar os afetados; ação corretiva = corrigir o processo que permitiu o proxy racial.',fail:'❌ Incorreto. A distinção não é de urgência nem de gravidade. Correção resolve o caso imediato; ação corretiva elimina a causa raiz para evitar recorrência. Para qualquer NC, deve-se avaliar se há causa raiz que pode gerar nova ocorrência.'},9:{ok:'✅ Correto. A ação corretiva (10.1) é reativa — responde a NCs identificadas. A melhoria contínua (10.2) é proativa — busca melhorar o SGSIA mesmo quando tudo está conforme. No Brasil, a melhoria proativa mais relevante em 2025-2026 é antecipar os requisitos do PL 2338/2023 antes de sua aprovação na Câmara.',fail:'❌ Incorreto. As cláusulas 10.1 e 10.2 têm propósitos diferentes. A 10.1 é reativa (responde a NCs). A 10.2 é proativa (busca melhorias sem NC). Ambas são obrigatórias durante todo o ciclo de certificação.'}},NEXT_MSG='Próximo: Módulo 9 — Anexo A em profundidade: os 38 controles com guia de implementação, evidências requeridas e os controles sem equivalente em ISO 27001.',RETRY_MSG='Recomendação: Revise a distinção correção vs. ação corretiva (slides 3 e 8), as NCs mais frequentes no Brasil (slide 5) e o caso Totvs (slide 9).';
+
+initDots();updUI();</script></body></html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ISO/IEC 42001|M01 PT-BR – Introdução</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--azul:#1A3A5C;--azul-mid:#2563A8;--acento:#E85820;--verde:#2D8B5A;--rojo:#C0392B;--amarillo:#F0A500;--morado:#6B48A8;--gris-claro:#F4F6FA;--gris-medio:#8A9BB0;--texto:#1C2B3A;--trans:all .35s cubic-bezier(.4,0,.2,1);--radio:14px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--azul);color:var(--texto)}
+#shell{display:flex;flex-direction:column;height:100vh;max-width:1100px;margin:0 auto;padding:0 12px}
+#progress-wrap{height:5px;background:rgba(255,255,255,.18);margin:0 -12px;flex-shrink:0}
+#progress-bar{height:100%;background:linear-gradient(90deg,var(--acento),var(--amarillo));width:0%;transition:width .5s ease}
+#topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 0;flex-shrink:0}
+#course-label{font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.55);text-transform:uppercase}
+#slide-counter{font-size:13px;font-weight:600;color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);padding:4px 12px;border-radius:20px}
+#stage{flex:1;position:relative;overflow:hidden;border-radius:var(--radio)}
+.slide{position:absolute;inset:0;opacity:0;transform:translateX(60px);transition:opacity .45s ease,transform .45s cubic-bezier(.4,0,.2,1);pointer-events:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.exit-left{opacity:0;transform:translateX(-60px)}
+#navbar{display:flex;align-items:center;justify-content:space-between;padding:10px 0;flex-shrink:0;gap:12px}
+.nav-btn{display:flex;align-items:center;gap:8px;padding:10px 24px;border-radius:30px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;transition:var(--trans);white-space:nowrap}
+#btn-prev{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)}
+#btn-prev:hover:not(:disabled){background:rgba(255,255,255,.22)}
+#btn-prev:disabled{opacity:.35;cursor:default}
+#btn-next{background:var(--acento);color:#fff}
+#btn-next:hover:not(:disabled){background:#d14a16;transform:translateY(-1px)}
+#btn-next:disabled{background:rgba(255,255,255,.15);color:rgba(255,255,255,.35);cursor:default}
+#slide-dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:var(--trans)}
+.dot.active{background:var(--acento);transform:scale(1.3)}
+.dot.done{background:rgba(255,255,255,.55)}
+.slide-cover{background:linear-gradient(135deg,var(--azul) 0%,#0D2340 50%,#1A1A2E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 32px;min-height:100%}
+.cover-badge{background:var(--acento);color:#fff;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:14px;display:inline-block}
+.cover-module{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:4px}
+.cover-clause{font-size:13px;font-weight:700;color:var(--amarillo);letter-spacing:.06em;margin-bottom:8px}
+.cover-title{font-family:'DM Serif Display',serif;font-size:clamp(22px,4vw,42px);color:#fff;line-height:1.15;margin-bottom:12px;max-width:780px}
+.cover-subtitle{font-size:14px;color:rgba(255,255,255,.65);max-width:600px;line-height:1.7;margin-bottom:18px}
+.cover-meta{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.meta-item{font-size:12.5px;color:rgba(255,255,255,.55)}
+.cover-obj{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px 20px;text-align:left;max-width:680px;width:100%}
+.cover-obj h3{font-size:11px;font-weight:700;color:var(--acento);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
+.cover-obj li{list-style:none;font-size:13px;color:rgba(255,255,255,.75);padding:3px 0 3px 16px;position:relative;line-height:1.5}
+.cover-obj li::before{content:"→";position:absolute;left:0;color:var(--acento);font-weight:700}
+.slide-concept{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 32px;min-height:100%;background:var(--azul-mid)}
+.concept-icon{font-size:50px;margin-bottom:14px;line-height:1}
+.concept-tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:7px}
+.concept-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,3.5vw,34px);color:#fff;margin-bottom:13px;max-width:700px;line-height:1.2}
+.concept-body{font-size:14.5px;color:rgba(255,255,255,.82);max-width:640px;line-height:1.8;margin-bottom:18px}
+.concept-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pill{background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);font-size:13px;font-weight:500;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.18)}
+.slide-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 32px;min-height:100%;background:linear-gradient(135deg,#0f2d5a 0%,#1a3a5c 100%)}
+.stat-ey{font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--acento);margin-bottom:11px}
+.stat-num{font-family:'DM Serif Display',serif;font-size:clamp(52px,9vw,94px);color:#fff;line-height:1;margin-bottom:5px}
+.stat-unit{font-size:17px;color:rgba(255,255,255,.6);font-weight:300;margin-bottom:15px}
+.stat-desc{font-size:15px;color:rgba(255,255,255,.8);max-width:560px;line-height:1.75;margin-bottom:20px}
+.stat-src{font-size:11px;color:rgba(255,255,255,.35)}
+.stat-cards{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;max-width:760px;margin-top:20px}
+.sc-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 16px;text-align:left;flex:1;min-width:145px}
+.sc-n{font-family:'DM Serif Display',serif;font-size:24px;color:var(--amarillo);line-height:1}
+.sc-l{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;line-height:1.4}
+.slide-content{background:var(--gris-claro);padding:28px;min-height:100%;display:flex;flex-direction:column}
+.content-header{background:var(--azul);border-radius:12px 12px 0 0;margin:-28px -28px 20px;padding:17px 24px}
+.ch-ey{font-size:11px;font-weight:700;color:var(--acento);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.ch-ti{font-family:'DM Serif Display',serif;font-size:clamp(15px,2.5vw,23px);color:#fff}
+.content-body{flex:1}
+.ct{width:100%;border-collapse:collapse;font-size:13px}
+.ct th{background:var(--azul);color:#fff;padding:9px 10px;text-align:left;font-weight:600;font-size:11.5px}
+.ct th:first-child{border-radius:7px 0 0 0}.ct th:last-child{border-radius:0 7px 0 0}
+.ct td{padding:8px 10px;border-bottom:1px solid #dde3ee;vertical-align:top;line-height:1.55;color:var(--texto)}
+.ct tr:nth-child(even) td{background:rgba(37,99,168,.03)}
+.ct tr:last-child td{border-bottom:none}
+.tv{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:9px}
+.tv-g{background:#d4f0e1;color:var(--verde)}.tv-b{background:#dde8f5;color:var(--azul-mid)}
+.tv-a{background:#fde8df;color:var(--acento)}.tv-y{background:#fef3d6;color:#a06b00}
+.tv-r{background:#fdecea;color:var(--rojo)}.tv-p{background:#ede0f5;color:var(--morado)}
+.slide-accordion{background:var(--gris-claro);padding:24px 28px;min-height:100%;display:flex;flex-direction:column}
+.acc-hd{text-align:center;margin-bottom:16px}
+.acc-ey{font-size:11px;font-weight:700;color:var(--azul-mid);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.acc-ti{font-family:'DM Serif Display',serif;font-size:clamp(16px,2.6vw,22px);color:var(--azul);margin-bottom:3px}
+.acc-su{font-size:12.5px;color:var(--gris-medio)}
+.acc-list{display:flex;flex-direction:column;gap:6px;flex:1}
+.acc-item{background:#fff;border-radius:9px;border:1.5px solid #dde3ee;overflow:hidden;transition:var(--trans)}
+.acc-item.open{border-color:var(--azul-mid)}
+.acc-trigger{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;background:none;border:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+.acc-trigger:hover{background:rgba(37,99,168,.04)}
+.acc-num{width:26px;height:26px;border-radius:50%;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;flex-shrink:0;transition:var(--trans)}
+.acc-item.open .acc-num{background:var(--acento)}
+.acc-label{font-size:13.5px;font-weight:600;color:var(--azul);flex:1}
+.acc-arrow{font-size:10px;color:var(--gris-medio);transition:transform .3s}
+.acc-item.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
+.acc-item.open .acc-body{max-height:500px}
+.acc-content{padding:0 14px 12px 52px;font-size:12.5px;color:var(--texto);line-height:1.7}
+.acc-content ul{list-style:none;margin-top:4px}
+.acc-content li{padding:2px 0 2px 12px;position:relative}
+.acc-content li::before{content:"·";position:absolute;left:0;color:var(--acento);font-weight:900;font-size:14px;line-height:1.2}
+.slide-reveal{background:var(--gris-claro);padding:22px 26px;min-height:100%;display:flex;flex-direction:column}
+.rv-hd{text-align:center;margin-bottom:15px}
+.rv-ey{font-size:11px;font-weight:700;color:var(--azul-mid);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.rv-ti{font-family:'DM Serif Display',serif;font-size:clamp(16px,2.6vw,22px);color:var(--azul);margin-bottom:3px}
+.rv-su{font-size:12.5px;color:var(--gris-medio)}
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;flex:1}
+.flip-card{perspective:800px;cursor:pointer;min-height:150px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flip-front{background:var(--azul);box-shadow:0 4px 12px rgba(26,58,92,.18)}
+.flip-front .ff-icon{font-size:28px;margin-bottom:8px}
+.flip-front .ff-title{font-size:13px;font-weight:600;color:#fff;line-height:1.3}
+.flip-front .ff-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px}
+.flip-back{background:#fff;border:2px solid var(--azul-mid);transform:rotateY(180deg)}
+.flip-back .fb-text{font-size:12px;color:var(--texto);line-height:1.6}
+.flip-hint{text-align:center;margin-top:10px;font-size:11px;color:var(--gris-medio)}
+.slide-case{background:var(--gris-claro);padding:20px 24px;min-height:100%;display:flex;flex-direction:column}
+.case-hdr{background:linear-gradient(135deg,var(--azul),#0f2347);border-radius:12px;padding:14px 18px;margin-bottom:12px;flex-shrink:0}
+.case-bdg{font-size:11px;font-weight:700;color:var(--amarillo);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.case-ttl{font-family:'DM Serif Display',serif;font-size:clamp(14px,2.2vw,19px);color:#fff;line-height:1.3}
+.case-tabs{display:flex;gap:4px;margin-bottom:11px;flex-wrap:wrap;flex-shrink:0}
+.case-tab{padding:5px 13px;border-radius:18px;border:1.5px solid #dde3ee;background:#fff;font-size:12px;font-weight:500;color:var(--gris-medio);cursor:pointer;transition:var(--trans)}
+.case-tab.active{background:var(--azul-mid);color:#fff;border-color:var(--azul-mid)}
+.case-pnl{display:none;flex:1;overflow-y:auto}
+.case-pnl.active{display:block}
+.c-st{font-size:11.5px;font-weight:700;color:var(--azul-mid);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.c-tx{font-size:13px;color:var(--texto);line-height:1.75;margin-bottom:8px}
+.c-hl{background:#fff;border-left:4px solid var(--acento);border-radius:0 8px 8px 0;padding:10px 13px;font-size:13px;color:var(--texto);line-height:1.6;margin:7px 0}
+.slide-timeline{background:var(--gris-claro);padding:22px 28px;min-height:100%;display:flex;flex-direction:column}
+.tl-hd{text-align:center;margin-bottom:16px}
+.tl-ti{font-family:'DM Serif Display',serif;font-size:clamp(16px,2.6vw,22px);color:var(--azul);margin-bottom:4px}
+.tl-su{font-size:12.5px;color:var(--gris-medio)}
+.tl-wrap{position:relative;max-width:800px;margin:0 auto;width:100%}
+.tl-line{position:absolute;left:50%;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--azul),var(--acento));transform:translateX(-50%);border-radius:2px}
+.tl-item{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;cursor:pointer;position:relative}
+.tl-item:nth-child(odd){flex-direction:row}
+.tl-item:nth-child(even){flex-direction:row-reverse}
+.tl-box{background:#fff;border-radius:10px;padding:11px 13px;flex:1;border:1.5px solid transparent;transition:var(--trans);box-shadow:0 2px 8px rgba(26,58,92,.07)}
+.tl-item.tl-active .tl-box{border-color:var(--azul-mid)}
+.tl-dot{width:12px;height:12px;border-radius:50%;background:var(--azul);border:3px solid #fff;box-shadow:0 0 0 2px var(--azul);flex-shrink:0;margin-top:11px;z-index:2;transition:var(--trans)}
+.tl-item.tl-active .tl-dot{background:var(--acento);box-shadow:0 0 0 2px var(--acento)}
+.tl-date{font-size:11px;font-weight:700;color:var(--acento);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.tl-ev{font-size:13px;font-weight:600;color:var(--azul);margin-bottom:3px}
+.tl-det{font-size:12px;color:var(--gris-medio);line-height:1.5;display:none}
+.tl-item.tl-active .tl-det{display:block}
+.slide-quiz{background:var(--gris-claro);padding:24px 28px;min-height:100%;display:flex;flex-direction:column}
+.quiz-hdr{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.quiz-bdg{background:var(--azul-mid);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:18px;letter-spacing:.1em;white-space:nowrap}
+.quiz-prog{font-size:13px;color:var(--gris-medio)}
+.quiz-q{font-family:'DM Serif Display',serif;font-size:clamp(15px,2.4vw,22px);color:var(--azul);margin-bottom:16px;line-height:1.4;max-width:720px}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;max-width:720px}
+.quiz-opt{background:#fff;border:2px solid #dde3ee;border-radius:10px;padding:11px 14px;cursor:pointer;text-align:left;font-family:'Inter',sans-serif;font-size:13.5px;color:var(--texto);transition:var(--trans);display:flex;align-items:center;gap:10px}
+.quiz-opt:hover:not(:disabled){border-color:var(--azul-mid);background:#f0f5fb}
+.opt-l{width:25px;height:25px;border-radius:50%;background:var(--gris-claro);border:2px solid #cdd3dd;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gris-medio);flex-shrink:0;transition:var(--trans)}
+.quiz-opt.correct{border-color:var(--verde)!important;background:#e8f7ef!important}
+.quiz-opt.correct .opt-l{background:var(--verde)!important;border-color:var(--verde)!important;color:#fff!important}
+.quiz-opt.wrong{border-color:var(--rojo)!important;background:#fdecea!important}
+.quiz-opt.wrong .opt-l{background:var(--rojo)!important;border-color:var(--rojo)!important;color:#fff!important}
+.quiz-opt.disabled{cursor:default}
+.quiz-fb{margin-top:13px;padding:11px 14px;border-radius:9px;font-size:13px;line-height:1.6;display:none;max-width:720px}
+.quiz-fb.show{display:block}
+.fb-ok{background:#e8f7ef;border-left:4px solid var(--verde);color:#1a5c38}
+.fb-fail{background:#fdecea;border-left:4px solid var(--rojo);color:#7a1a1a}
+.quiz-must{font-size:12px;color:var(--acento);font-weight:600;margin-top:7px;display:none;max-width:720px}
+.quiz-must.show{display:block}
+.slide-result{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 28px;min-height:100%;background:linear-gradient(135deg,var(--azul) 0%,#0D2340 100%)}
+.res-icon{font-size:56px;margin-bottom:13px;line-height:1}
+.res-ti{font-family:'DM Serif Display',serif;font-size:clamp(20px,3.5vw,33px);color:#fff;margin-bottom:6px}
+.res-sc{font-family:'DM Serif Display',serif;font-size:clamp(44px,7vw,70px);line-height:1;margin:6px 0}
+.res-su{font-size:14px;color:rgba(255,255,255,.65);margin-bottom:16px;max-width:500px;line-height:1.7}
+.res-bk{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.rb{text-align:center}
+.rb-n{font-family:'DM Serif Display',serif;font-size:27px;color:#fff}
+.rb-l{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px}
+.res-msg{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:13px 18px;max-width:560px;font-size:13px;color:rgba(255,255,255,.8);line-height:1.7}
+.btn-retry{margin-top:14px;background:var(--acento);color:#fff;border:none;border-radius:28px;padding:10px 24px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:var(--trans)}
+.btn-retry:hover{background:#d14a16;transform:translateY(-2px)}
+</style>
+</head>
+<body>
+<div id="shell">
+  <div id="progress-wrap"><div id="progress-bar"></div></div>
+  <div id="topbar">
+    <div id="course-label">ISO/IEC 42001:2023 — Lead Auditor &amp; Implementer · PT-BR</div>
+    <div id="slide-counter">1 / 14</div>
+  </div>
+  <div id="stage">
+    <div class="slide slide-cover active" data-index="0">
+      <div class="cover-badge">Módulo 1 de 12</div>
+      <div class="cover-module">ISO/IEC 42001:2023 · Lead Auditor &amp; Implementer · PT-BR</div>
+      <div class="cover-clause">Introdução — IA e Governança no Brasil</div>
+      <h1 class="cover-title">Governança de IA no Brasil:<br>ISO/IEC 42001 e o Cenário Regulatório</h1>
+      <p class="cover-subtitle">O Brasil vive um momento decisivo para a IA: o PL 2338/2023 avança no Senado, a LGPD já impõe obrigações sobre decisões automatizadas e a ISO/IEC 42001:2023 oferece o framework de gestão que prepara as organizações para o que vem pela frente.</p>
+      <div class="cover-meta"><span class="meta-item">⏱ 45 min</span><span class="meta-item">14 slides · 3 questões</span></div>
+      <div class="cover-obj">
+        <h3>Objetivos de aprendizagem</h3>
+        <ul>
+          <li>Compreender o contexto regulatório brasileiro da IA: LGPD, PL 2338/2023 e EBIA 2024–2028</li>
+          <li>Identificar os tipos de sistema de IA relevantes para o mercado brasileiro</li>
+          <li>Distinguir ISO/IEC 42001 de outras normas de gestão (ISO 27001, ISO 9001)</li>
+          <li>Entender por que a certificação ISO 42001 é vantagem competitiva no Brasil agora</li>
+          <li>Conhecer os casos de uso de IA mais comuns nas empresas brasileiras</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="slide slide-stat" data-index="1">
+      <div class="stat-ey">IA no Brasil — Escala do mercado</div>
+      <div class="stat-num">R$45bi</div>
+      <div class="stat-unit">investimento projetado em IA no Brasil até 2027</div>
+      <p class="stat-desc">O Brasil é o maior mercado de IA da América Latina, com empresas como Nubank, iFood, Itaú, Embrapa e Totvs utilizando IA em escala. O PL 2338/2023 — inspirado no EU AI Act — está em tramitação no Senado e deve ser aprovado em 2025-2026, criando obrigações legais para sistemas de IA de alto risco.</p>
+      <p class="stat-src">Fonte: IDC Brasil 2024, Estratégia Brasileira de IA (EBIA 2024-2028)</p>
+      <div class="stat-cards">
+        <div class="sc-card"><div class="sc-n">73%</div><div class="sc-l">das empresas BR com mais de 500 funcionários usam alguma forma de IA (FGV 2024)</div></div>
+        <div class="sc-card"><div class="sc-n">LGPD</div><div class="sc-l">Art. 20 já exige revisão humana de decisões automatizadas que afetam titulares</div></div>
+        <div class="sc-card"><div class="sc-n">2026</div><div class="sc-l">expectativa de aprovação do PL 2338/2023 com sanções de até R$50 milhões</div></div>
+      </div>
+    </div>
+
+    <div class="slide slide-concept" data-index="2">
+      <div class="concept-icon">🤖</div>
+      <div class="concept-tag">O que é um sistema de IA · Definição ISO 42001</div>
+      <h2 class="concept-title">Sistema de IA segundo a ISO/IEC 42001:2023</h2>
+      <p class="concept-body">Um <strong style="color:#fff">sistema de IA</strong> é um sistema de máquina que, a partir de um conjunto de objetivos definidos por humanos, é capaz de fazer <strong style="color:#fff">previsões, recomendações, decisões ou conteúdos</strong> que influenciam ambientes reais ou virtuais. O que diferencia um sistema de IA de um software convencional é a sua capacidade de aprender padrões a partir de dados e generalizar para situações novas — e, com isso, produzir comportamentos que não foram explicitamente programados por um desenvolvedor.</p>
+      <div class="concept-pills">
+        <span class="pill">Aprendizado de máquina</span><span class="pill">Processamento de linguagem</span>
+        <span class="pill">Visão computacional</span><span class="pill">Sistemas de recomendação</span>
+        <span class="pill">Decisão automatizada</span>
+      </div>
+    </div>
+
+    <div class="slide slide-content" data-index="3">
+      <div class="content-header">
+        <div class="ch-ey">Casos de uso · Mercado brasileiro</div>
+        <h2 class="ch-ti">IA em uso no Brasil — Os 8 casos mais relevantes para a ISO 42001</h2>
+      </div>
+      <div class="content-body">
+        <table class="ct">
+          <thead><tr><th>Setor</th><th>Caso de uso</th><th>Empresa exemplo</th><th>Risco de governança</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Financeiro</strong></td><td>Score de crédito automatizado</td><td>Nubank, Serasa, Itaú</td><td><span class="tv tv-r">Alto — LGPD Art. 20 + PL 2338 Anexo</span></td></tr>
+            <tr><td><strong>Saúde</strong></td><td>Triagem de pacientes e diagnóstico por imagem</td><td>Einstein, Fleury, Dasa</td><td><span class="tv tv-r">Alto — CFM + ANVISA</span></td></tr>
+            <tr><td><strong>Varejo</strong></td><td>Preços dinâmicos e personalização</td><td>Magalu, Americanas, iFood</td><td><span class="tv tv-a">Médio — PROCON + CDC</span></td></tr>
+            <tr><td><strong>RH</strong></td><td>Triagem de currículos e avaliação de desempenho</td><td>Totvs, SAP BR, Gupy</td><td><span class="tv tv-r">Alto — CLT + discriminação</span></td></tr>
+            <tr><td><strong>Agro</strong></td><td>Análise de imagens de satélite e previsão de safra</td><td>Embrapa, JBS, SLC Agrícola</td><td><span class="tv tv-g">Baixo-médio</span></td></tr>
+            <tr><td><strong>Jurídico</strong></td><td>Análise preditiva de jurisprudência</td><td>TOTVS Jurídico, Elaw, JusBrasil</td><td><span class="tv tv-a">Médio — ética profissional OAB</span></td></tr>
+            <tr><td><strong>Governo</strong></td><td>Análise de risco fiscal e prevenção de fraudes</td><td>Receita Federal, TCU, BNDES</td><td><span class="tv tv-r">Alto — transparência pública + LGPD</span></td></tr>
+            <tr><td><strong>Educação</strong></td><td>Plataformas adaptativas e detecção de evasão</td><td>Kroton, Descomplica, FIAP</td><td><span class="tv tv-a">Médio — MEC + impacto estudantes</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide slide-reveal" data-index="4">
+      <div class="rv-hd">
+        <div class="rv-ey">Marco regulatório BR · Interativo</div>
+        <h2 class="rv-ti">O ecossistema regulatório da IA no Brasil — Clique para explorar</h2>
+        <p class="rv-su">Cada card revela uma norma ou regulação que impacta a governança de IA nas organizações brasileiras</p>
+      </div>
+      <div class="flip-grid">
+        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+          <div class="flip-front"><div class="ff-icon">🔒</div><div class="ff-title">LGPD Lei 13.709/2018</div><div class="ff-hint">Toque para ver</div></div>
+          <div class="flip-back"><div class="fb-text"><strong>Art. 20:</strong> Titular tem direito à revisão humana de decisões automatizadas. Cobre todos os sistemas de IA que processam dados pessoais. ANPD fiscaliza. Multa até 2% do faturamento (máx. R$50mi/infração).</div></div>
+        </div></div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+          <div class="flip-front"><div class="ff-icon">⚖️</div><div class="ff-title">PL 2338/2023 — Lei de IA</div><div class="ff-hint">Toque para ver</div></div>
+          <div class="flip-back"><div class="fb-text">Aprovado pelo Senado em 2024, aguarda Câmara. Inspirado no EU AI Act: classifica sistemas de IA por risco, exige avaliação de impacto para sistemas de alto risco, cria o Conselho de IA. Sanções até R$50 milhões.</div></div>
+        </div></div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+          <div class="flip-front"><div class="ff-icon">🇧🇷</div><div class="ff-title">EBIA 2024–2028</div><div class="ff-hint">Toque para ver</div></div>
+          <div class="flip-back"><div class="fb-text">Estratégia Brasileira de IA — lançada pelo MCTI em 2024. Define 6 eixos: pesquisa, talentos, infraestrutura, governança, aplicações e internacionalização. A ISO 42001 é citada como instrumento de governança.</div></div>
+        </div></div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+          <div class="flip-front"><div class="ff-icon">🏦</div><div class="ff-title">BCB Resolução 4.557</div><div class="ff-hint">Toque para ver</div></div>
+          <div class="flip-back"><div class="fb-text">Banco Central exige gestão de riscos para modelos (IRB, scoring) em instituições financeiras. O Open Finance amplia o uso de IA no setor bancário. ISO 42001 complementa as exigências do BACEN para modelos de IA.</div></div>
+        </div></div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+          <div class="flip-front"><div class="ff-icon">🏥</div><div class="ff-title">CFM + ANVISA · Saúde</div><div class="ff-hint">Toque para ver</div></div>
+          <div class="flip-back"><div class="fb-text">CFM Resolução 2.309/2022: uso de IA em diagnóstico e terapêutica exige responsabilidade médica. ANVISA RDC 657/2022: software para uso médico (SaMD) inclui sistemas de IA. ISO 42001 complementa ambas.</div></div>
+        </div></div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+          <div class="flip-front"><div class="ff-icon">📊</div><div class="ff-title">CGI.br / NIC.br · Internet</div><div class="ff-hint">Toque para ver</div></div>
+          <div class="flip-back"><div class="fb-text">CGI.br publicou a Carta de Princípios para uso responsável da IA (2023). NIC.br coordena o Centro de Estudos sobre IA e Internet. Referenciam ISO 42001 como base técnica de governança.</div></div>
+        </div></div>
+      </div>
+      <div class="flip-hint">Clique em cada card para revelar o conteúdo</div>
+    </div>
+
+    <div class="slide slide-quiz" data-index="5" data-quiz="true" data-correct="2">
+      <div class="quiz-hdr"><span class="quiz-bdg">QUESTÃO 1 / 3</span><span class="quiz-prog">Módulo 1 · Avaliação</span></div>
+      <p class="quiz-q">O artigo 20 da LGPD (Lei 13.709/2018) estabelece um direito específico dos titulares de dados em relação a decisões tomadas por sistemas de IA. Qual é esse direito?</p>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answerQuiz(this,0,5)"><span class="opt-l">A</span>O direito de proibir o uso de qualquer sistema de IA pela empresa que processa seus dados</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,1,5)"><span class="opt-l">B</span>O direito de ser informado sobre a existência de processamento automatizado, mas não de contestá-lo</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,2,5)"><span class="opt-l">C</span>O direito de solicitar revisão humana de decisões tomadas exclusivamente com base em tratamento automatizado de dados pessoais, incluindo decisões destinadas a definir o perfil pessoal, profissional, de consumo e de crédito</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,3,5)"><span class="opt-l">D</span>O direito à explicação do algoritmo em código-fonte aberto para auditoria pública</button>
+      </div>
+      <div id="fb-5" class="quiz-fb"></div>
+      <div id="must-5" class="quiz-must">⚠ Selecione uma resposta antes de continuar</div>
+    </div>
+
+    <div class="slide slide-concept" data-index="6">
+      <div class="concept-icon">📋</div>
+      <div class="concept-tag">O que é · ISO/IEC 42001:2023</div>
+      <h2 class="concept-title">ISO/IEC 42001: o sistema de gestão da IA responsável</h2>
+      <p class="concept-body">A ISO/IEC 42001:2023 é a primeira norma internacional de sistema de gestão especificamente para Inteligência Artificial. Segue a estrutura HLS (High Level Structure) comum às normas ISO modernas, o que permite integração com ISO 27001, ISO 9001 e ISO 14001. Define o que uma organização deve <strong style="color:#fff">estabelecer, implementar, manter e melhorar continuamente</strong> para gerir os riscos e impactos dos seus sistemas de IA de forma responsável. Não é uma norma técnica de como construir IA, mas de como <strong style="color:#fff">governar</strong> os sistemas de IA que a organização usa ou oferece.</p>
+      <div class="concept-pills">
+        <span class="pill">Sistema de gestão (HLS)</span><span class="pill">Riscos E impactos</span>
+        <span class="pill">Ciclo PDCA</span><span class="pill">Certificável por terceiros</span>
+        <span class="pill">Integra com 27001/9001</span>
+      </div>
+    </div>
+
+    <div class="slide slide-content" data-index="7">
+      <div class="content-header">
+        <div class="ch-ey">Comparativo · Por que ISO 42001 agora no Brasil</div>
+        <h2 class="ch-ti">ISO 42001 vs. ISO 27001 vs. PL 2338/2023 — O que cobre cada um</h2>
+      </div>
+      <div class="content-body">
+        <table class="ct">
+          <thead><tr><th>Dimensão</th><th>ISO 27001</th><th>ISO 42001</th><th>PL 2338/2023 (quando lei)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Foco</strong></td><td>Segurança da informação (CIA)</td><td>Governança responsável de IA</td><td>Obrigações legais para IA de alto risco</td></tr>
+            <tr><td><strong>O que protege</strong></td><td>Dados e sistemas de informação</td><td>Pessoas afetadas por decisões de IA</td><td>Direitos fundamentais dos cidadãos</td></tr>
+            <tr><td><strong>Quem audita</strong></td><td>Certificadora acreditada (INMETRO/IAF)</td><td>Certificadora acreditada (INMETRO/IAF)</td><td>Autoridade Nacional (a ser criada)</td></tr>
+            <tr><td><strong>Obrigatoriedade</strong></td><td>Voluntária (exigida por contratos)</td><td>Voluntária (vantagem competitiva)</td><td>Obrigatória para sistemas de alto risco</td></tr>
+            <tr><td><strong>LGPD Art. 20</strong></td><td>Complementa (cobre a segurança dos dados)</td><td>Cobre diretamente (AIIA + canal de revisão)</td><td>Reforça o direito de revisão humana</td></tr>
+            <tr><td><strong>Valor para licitações</strong></td><td>Exigida em muitos editais públicos</td><td>Diferencial crescente em editais com IA</td><td>Pode virar requisito para contratar com governo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide slide-timeline" data-index="8">
+      <div class="tl-hd">
+        <h2 class="tl-ti">A linha do tempo da regulação de IA no Brasil — Clique em cada marco</h2>
+        <p class="tl-su">Do Marco Civil da Internet ao PL 2338/2023</p>
+      </div>
+      <div class="tl-wrap">
+        <div class="tl-line"></div>
+        <div class="tl-item tl-active" onclick="toggleTL(this)">
+          <div class="tl-box"><div class="tl-date">2018</div><div class="tl-ev">LGPD promulgada</div><div class="tl-det">Lei 13.709/2018 aprovada. Art. 20 establece direito à revisão de decisões automatizadas. Vigência efetiva: setembro 2020.</div></div>
+          <div class="tl-dot"></div><div style="flex:1"></div>
+        </div>
+        <div class="tl-item" onclick="toggleTL(this)">
+          <div style="flex:1"></div><div class="tl-dot"></div>
+          <div class="tl-box"><div class="tl-date">2021</div><div class="tl-ev">Estratégia Nacional de IA (1ª versão)</div><div class="tl-det">MCTI lança a Estratégia Brasileira de Inteligência Artificial, primeira versão. Define princípios éticos e eixos de investimento.</div></div>
+        </div>
+        <div class="tl-item" onclick="toggleTL(this)">
+          <div class="tl-box"><div class="tl-date">2023</div><div class="tl-ev">ISO/IEC 42001:2023 publicada + PL 2338 apresentado</div><div class="tl-det">ISO publica a norma de sistema de gestão de IA em dezembro de 2023. No Brasil, o PL 2338/2023 é apresentado pelo Senado como proposta de lei de IA, inspirado no EU AI Act.</div></div>
+          <div class="tl-dot"></div><div style="flex:1"></div>
+        </div>
+        <div class="tl-item" onclick="toggleTL(this)">
+          <div style="flex:1"></div><div class="tl-dot"></div>
+          <div class="tl-box"><div class="tl-date">2024</div><div class="tl-ev">PL aprovado no Senado + EBIA 2024-2028</div><div class="tl-det">PL 2338/2023 aprovado pelo Senado Federal em novembro 2024. MCTI lança a Estratégia Brasileira de IA (EBIA) 2024-2028, que cita a ISO 42001 como referência de governança.</div></div>
+        </div>
+        <div class="tl-item" onclick="toggleTL(this)">
+          <div class="tl-box"><div class="tl-date">2025-2026</div><div class="tl-ev">Aprovação na Câmara e regulamentação</div><div class="tl-det">Expectativa de aprovação na Câmara dos Deputados e sanção presidencial. Período de vacância de 12-24 meses para adaptação das organizações — janela ideal para implementar a ISO 42001.</div></div>
+          <div class="tl-dot"></div><div style="flex:1"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide slide-quiz" data-index="9" data-quiz="true" data-correct="1">
+      <div class="quiz-hdr"><span class="quiz-bdg">QUESTÃO 2 / 3</span><span class="quiz-prog">Módulo 1 · Avaliação</span></div>
+      <p class="quiz-q">O PL 2338/2023 — o projeto de Lei de IA brasileiro — é frequentemente comparado ao EU AI Act europeu. Qual é a principal diferença de abordagem entre os dois?</p>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answerQuiz(this,0,9)"><span class="opt-l">A</span>O EU AI Act proíbe totalmente a IA de alto risco, enquanto o PL 2338/2023 permite qualquer uso de IA sem restrições</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,1,9)"><span class="opt-l">B</span>O EU AI Act é um regulamento diretamente aplicável em todos os países da UE; o PL 2338/2023 é uma lei nacional brasileira ainda em tramitação, com abordagem baseada em risco similar mas adaptada ao contexto jurídico e econômico brasileiro</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,2,9)"><span class="opt-l">C</span>O EU AI Act foca apenas em IA pública; o PL 2338/2023 foca apenas em IA privada</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,3,9)"><span class="opt-l">D</span>São documentos idênticos: o Brasil adotou o EU AI Act sem modificações</button>
+      </div>
+      <div id="fb-9" class="quiz-fb"></div>
+      <div id="must-9" class="quiz-must">⚠ Selecione uma resposta antes de continuar</div>
+    </div>
+
+    <div class="slide slide-content" data-index="10">
+      <div class="content-header">
+        <div class="ch-ey">Estrutura da norma · Visão geral</div>
+        <h2 class="ch-ti">A estrutura da ISO/IEC 42001:2023 — Cláusulas e Anexo A</h2>
+      </div>
+      <div class="content-body">
+        <table class="ct">
+          <thead><tr><th>Cláusula</th><th>Tema</th><th>PDCA</th><th>Destaque para o Brasil</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tv tv-b">4</span></td><td>Contexto da organização</td><td>Plan</td><td>Incluir LGPD, PL 2338/2023 e regulação setorial (BACEN, ANVISA, CFM)</td></tr>
+            <tr><td><span class="tv tv-b">5</span></td><td>Liderança</td><td>Plan</td><td>Política de IA deve mencionar LGPD e princípios da EBIA</td></tr>
+            <tr><td><span class="tv tv-b">6</span></td><td>Planejamento (Risk Assessment + AIIA)</td><td>Plan</td><td>AIIA deve analisar impacto sobre grupos vulneráveis conforme PL 2338</td></tr>
+            <tr><td><span class="tv tv-b">7</span></td><td>Suporte (recursos, competências)</td><td>Do</td><td>Competências em LGPD obrigatórias para o DPO e equipe de IA</td></tr>
+            <tr><td><span class="tv tv-b">8</span></td><td>Operação (ciclo de vida da IA)</td><td>Do</td><td>Controles A.6.8 e A.9.4 críticos para conformidade com PL 2338 Art. de alto risco</td></tr>
+            <tr><td><span class="tv tv-b">9</span></td><td>Avaliação de desempenho</td><td>Check</td><td>Métricas de equidade (fairness) por raça, gênero e região — especialmente relevantes no Brasil</td></tr>
+            <tr><td><span class="tv tv-b">10</span></td><td>Melhoria</td><td>Act</td><td>Ciclo de melhoria contínua alinhado com atualizações do PL 2338 durante vacância</td></tr>
+            <tr><td><span class="tv tv-a">Anexo A</span></td><td>38 controles de governança de IA</td><td>Todos</td><td>A.8.5 (canal para afetados) mapeia com LGPD Art. 18 + Art. 20</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide slide-concept" data-index="11">
+      <div class="concept-icon">🏆</div>
+      <div class="concept-tag">Por que agora · Vantagem competitiva</div>
+      <h2 class="concept-title">Por que a ISO 42001 é vantagem competitiva no Brasil em 2025-2026</h2>
+      <p class="concept-body">O mercado brasileiro de IA ainda não tem muitas organizações certificadas na ISO 42001. Isso cria uma <strong style="color:#fff">janela de oportunidade</strong> para quem age primeiro. Empresas certificadas terão: (1) diferencial em licitações públicas com IA, (2) argumento de conformidade antecipada com o PL 2338/2023 durante a vacância, (3) menor risco de autuação pela ANPD em casos de decisões automatizadas contestadas via LGPD Art. 20, e (4) credencial reconhecida para clientes internacionais que exigem ISO 42001.</p>
+      <div class="concept-pills">
+        <span class="pill">1º mover advantage</span><span class="pill">Licitações públicas</span>
+        <span class="pill">LGPD Art. 20 compliance</span><span class="pill">Clientes internacionais</span>
+      </div>
+    </div>
+
+    <div class="slide slide-quiz" data-index="12" data-quiz="true" data-correct="3">
+      <div class="quiz-hdr"><span class="quiz-bdg">QUESTÃO 3 / 3</span><span class="quiz-prog">Módulo 1 · Avaliação</span></div>
+      <p class="quiz-q">Uma empresa brasileira de tecnologia usa um sistema de IA para triagem de currículos em seus processos seletivos. Quais obrigações brasileiras já estão em vigor (independentemente do PL 2338/2023 ser aprovado) para esse sistema?</p>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answerQuiz(this,0,12)"><span class="opt-l">A</span>Nenhuma — o Brasil ainda não tem regulação específica para IA</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,1,12)"><span class="opt-l">B</span>Apenas a obrigação de informar aos candidatos que a triagem é automatizada</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,2,12)"><span class="opt-l">C</span>Apenas as obrigações da CLT sobre processos seletivos, mas não as de proteção de dados</button>
+        <button class="quiz-opt" onclick="answerQuiz(this,3,12)"><span class="opt-l">D</span>A LGPD já está em vigor: Art. 20 dá aos candidatos o direito de solicitar revisão humana das decisões automatizadas. A empresa deve ter base legal para tratar os dados dos candidatos, respeitar os princípios de necessidade e finalidade, e garantir não discriminação por categorias sensíveis (raça, gênero, origem)</button>
+      </div>
+      <div id="fb-12" class="quiz-fb"></div>
+      <div id="must-12" class="quiz-must">⚠ Selecione uma resposta antes de continuar</div>
+    </div>
+
+    <div class="slide slide-result" data-index="13">
+      <div class="res-icon" id="res-icon">🎯</div>
+      <h2 class="res-ti" id="res-ti">Resultado — Módulo 1</h2>
+      <div class="res-sc" id="res-sc" style="color:var(--amarillo)">—</div>
+      <p class="res-su" id="res-sub"></p>
+      <div class="res-bk">
+        <div class="rb"><div class="rb-n" id="rb-c">—</div><div class="rb-l">Corretas</div></div>
+        <div class="rb"><div class="rb-n" id="rb-w">—</div><div class="rb-l">Incorretas</div></div>
+        <div class="rb"><div class="rb-n" id="rb-t">3</div><div class="rb-l">Total</div></div>
+      </div>
+      <div class="res-msg" id="res-msg"></div>
+      <button class="btn-retry" id="btn-retry" style="display:none" onclick="retryQuiz()">🔄 Rever e tentar novamente</button>
+    </div>
+</div>
+  <div id="navbar">
+    <button class="nav-btn" id="btn-prev" onclick="navigate(-1)" disabled>← Anterior</button>
+    <div id="slide-dots"></div>
+    <button class="nav-btn" id="btn-next" onclick="navigate(1)">Próximo →</button>
+  </div>
+</div>
+<script>
+function findAPI(w){var t=0;while(!w.API&&t<7&&w.parent&&w.parent!=w){w=w.parent;t++;}return w.API||null;}
+var scormAPI=findAPI(window);
+function lms(fn,...a){if(scormAPI){try{return scormAPI[fn](...a)}catch(e){}}return null;}
+lms('LMSInitialize','');lms('LMSSetValue','cmi.core.lesson_status','incomplete');lms('LMSSetValue','cmi.core.lesson_location','0');
+function _initDots(total){const el=document.getElementById('slide-dots');for(let i=0;i<total;i++){const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);el.appendChild(d);}}
+function _updDots(){document.querySelectorAll('.dot').forEach((d,i)=>{d.className='dot'+(i===C?' active':(i<C?' done':''));});}
+function _updProg(){document.getElementById('progress-bar').style.width=(((C+1)/TOTAL)*100)+'%';document.getElementById('slide-counter').textContent=(C+1)+' / '+TOTAL;lms('LMSSetValue','cmi.core.lesson_location',String(C));}
+function navigate(dir){const t=C+dir;if(t<0||t>=TOTAL)return;if(dir>0&&QS.includes(C)&&!QA[C]){document.getElementById('must-'+C).classList.add('show');return;}goTo(t);}
+function goTo(idx){if(idx<0||idx>=TOTAL)return;const sl=document.querySelectorAll('.slide');sl[C].classList.remove('active');sl[C].classList.add('exit-left');setTimeout(()=>sl[C].classList.remove('exit-left'),460);C=idx;sl[C].classList.add('active');document.getElementById('btn-prev').disabled=(C===0);const nb=document.getElementById('btn-next');nb.disabled=(C===TOTAL-1)||(QS.includes(C)&&!QA[C]);_updDots();_updProg();if(C===TOTAL-1)showResult();}
+function answerQuiz(btn,chosen,si){if(QA[si])return;QA[si]=true;const correct=QC[si];btn.closest('.quiz-opts').querySelectorAll('.quiz-opt').forEach((o,i)=>{o.disabled=true;o.classList.add('disabled');if(i===correct)o.classList.add('correct');if(i===chosen&&chosen!==correct)o.classList.add('wrong');});const ok=(chosen===correct);QSC[si]=ok;const fb=document.getElementById('fb-'+si);fb.textContent=ok?FB[si].ok:FB[si].fail;fb.className='quiz-fb show '+(ok?'fb-ok':'fb-fail');document.getElementById('must-'+si).classList.remove('show');document.getElementById('btn-next').disabled=false;}
+function showResult(){const vals=Object.values(QSC),c=vals.filter(Boolean).length,t=Object.keys(QC).length;const pct=Math.round((c/t)*100),passed=pct>=70;document.getElementById('res-icon').textContent=passed?'🏆':'📚';document.getElementById('res-ti').textContent=passed?'Módulo concluído com sucesso!':'Revise o conteúdo';document.getElementById('res-sc').textContent=pct+'%';document.getElementById('res-sc').style.color=passed?'#2ecc71':'var(--amarillo)';document.getElementById('rb-c').textContent=c;document.getElementById('rb-w').textContent=t-c;document.getElementById('rb-t').textContent=t;document.getElementById('res-sub').textContent=passed?'Você acertou '+c+' de '+t+' questões.':'Você acertou '+c+' de '+t+'. São necessários 70% para avançar.';document.getElementById('res-msg').innerHTML=passed?NEXT_MSG:RETRY_MSG;if(!passed)document.getElementById('btn-retry').style.display='inline-block';lms('LMSSetValue','cmi.core.score.raw',String(pct));lms('LMSSetValue','cmi.core.lesson_status',passed?'passed':'failed');lms('LMSFinish','');}
+function retryQuiz(){goTo(0);}
+function toggleAcc(btn){btn.closest('.acc-item').classList.toggle('open');}
+function switchCase(btn,id){document.querySelectorAll('.case-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.case-pnl').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('cp-'+id).classList.add('active');}
+function toggleTL(el){el.classList.toggle('tl-active');}
+
+var C=0,TOTAL=14;
+var QS=[5,9,12],QA={5:false,9:false,12:false};
+var QC={5:2,9:1,12:3};
+var QSC={5:false,9:false,12:false};
+var FB={
+  5:{ok:"✅ Correto. O art. 20 da LGPD garante ao titular o direito de solicitar a revisão humana de qualquer decisão tomada exclusivamente com base em tratamento automatizado de dados pessoais — incluindo decisões sobre perfil pessoal, profissional, de consumo e de crédito. Esta é a principal obrigação legal brasileira já vigente que impacta sistemas de IA decisórios.",
+     fail:"❌ Incorreto. O art. 20 da LGPD não proíbe a IA nem exige código aberto. Ele garante especificamente o direito à revisão humana das decisões automatizadas que afetam o titular. Esta obrigação já está em vigor e é fiscalizada pela ANPD. A ISO 42001 — especialmente o controle A.8.5 e o AIIA (§ 6.1.4) — ajuda a implementar esse direito de forma sistemática."},
+  9:{ok:"✅ Correto. O EU AI Act é um regulamento europeu com aplicação direta em todos os Estados-membros da UE. O PL 2338/2023 é uma proposta de lei nacional brasileira, ainda em tramitação, que adota abordagem similar baseada em risco mas adaptada ao contexto jurídico, econômico e social brasileiro — incluindo referências à LGPD e ao contexto de desigualdade social do país.",
+     fail:"❌ Incorreto. O EU AI Act e o PL 2338/2023 são instrumentos jurídicos distintos, em jurisdições diferentes e com mecanismos de aplicação diferentes. O PL brasileiro foi inspirado no EU AI Act mas adaptado à realidade brasileira. Ele ainda está em tramitação na Câmara dos Deputados."},
+  12:{ok:"✅ Correto. A LGPD (Lei 13.709/2018) já está vigente desde setembro de 2020. Um sistema de IA de triagem de currículos processa dados pessoais (e potencialmente dados sensíveis como raça e gênero) e toma decisões automatizadas sobre candidatos. O Art. 20 da LGPD já garante aos candidatos o direito à revisão humana. A empresa já tem obrigações hoje, independentemente do PL 2338/2023.",
+     fail:"❌ Incorreto. O Brasil já tem regulação em vigor que impacta sistemas de IA de triagem de currículos: a LGPD. O Art. 20 garante revisão humana de decisões automatizadas. O tratamento de dados de candidatos (incluindo dados sensíveis como raça e gênero implícitos no currículo) exige base legal, finalidade específica e não discriminação. A ausência de lei de IA específica não significa ausência de obrigações."}
+};
+var NEXT_MSG='<strong>Próximo passo:</strong> O Módulo 2 aborda a Cláusula 4 da ISO 42001 — Contexto da organização: como definir as partes interessadas, os requisitos legais (LGPD, PL 2338) e o escopo do SGSIA com foco no mercado brasileiro.';
+var RETRY_MSG='<strong>Recomendação:</strong> Revise o Art. 20 da LGPD (slide 5), a diferença entre ISO 42001 e ISO 27001 (slide 8) e o PL 2338/2023 vs. EU AI Act (slide 9). São os fundamentos mais examinados nesta cláusula.';
+_initDots(TOTAL);_updProg();</script>
+</body></html>
