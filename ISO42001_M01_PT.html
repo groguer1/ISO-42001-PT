@@ -184,7 +184,9 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
     <div id="course-label">ISO/IEC 42001:2023 — Lead Auditor &amp; Implementer · PT-BR</div>
     <div id="slide-counter">1 / 14</div>
   </div>
-  <div id="stage">
+  
+    <button class="bvi-banner" onclick="bviOpen()">&#9654;&nbsp;<strong>Resumo do bloco em v&iacute;deo</strong><span class="bvi-banner-sub">&nbsp;&middot;&nbsp;Módulos 1–3</span></button>
+    <div id="stage">
     <div class="slide slide-cover active" data-index="0">
       <div class="cover-badge">Módulo 1 de 12</div>
       <div class="cover-module">ISO/IEC 42001:2023 · Lead Auditor &amp; Implementer · PT-BR</div>
@@ -472,4 +474,62 @@ var FB={
 var NEXT_MSG='<strong>Próximo passo:</strong> O Módulo 2 aborda a Cláusula 4 da ISO 42001 — Contexto da organização: como definir as partes interessadas, os requisitos legais (LGPD, PL 2338) e o escopo do SGSIA com foco no mercado brasileiro.';
 var RETRY_MSG='<strong>Recomendação:</strong> Revise o Art. 20 da LGPD (slide 5), a diferença entre ISO 42001 e ISO 27001 (slide 8) e o PL 2338/2023 vs. EU AI Act (slide 9). São os fundamentos mais examinados nesta cláusula.';
 _initDots(TOTAL);_updProg();</script>
+
+<!-- BLOQUE-VIDEO-INTRO -->
+<div class="bvi-overlay" id="bviOverlay" role="dialog" aria-label="V&iacute;deo resumo do bloco" aria-modal="true">
+  <div class="bvi-card">
+    <button class="bvi-close" onclick="bviClose()" aria-label="Fechar">&times;</button>
+    <div class="bvi-stage" id="bviStage"></div>
+    <div class="bvi-bar"><div class="bvi-fill" id="bviFill"></div></div>
+    <div class="bvi-ctrls">
+      <button class="bvi-play" id="bviPlay" onclick="bviToggle()">Pausar</button>
+      <span class="bvi-label">Resumo · Módulos 1–3</span>
+    </div>
+    <audio id="bviAudio" src="media/bloque-1.mp3" preload="metadata"></audio>
+  </div>
+</div>
+<style>
+.bvi-banner{display:block;width:calc(100% + 24px);margin:8px -12px 0;border:none;cursor:pointer;background:#5B4B8A;color:#fff;padding:9px 14px;font:600 13.5px/1.35 Inter,system-ui,sans-serif;text-align:center;flex-shrink:0;letter-spacing:.2px}
+.bvi-banner:hover{background:#4a3d73}
+.bvi-banner strong{font-weight:800}
+.bvi-banner-sub{opacity:.82;font-weight:600}
+.bvi-overlay{position:fixed;inset:0;z-index:9999;background:rgba(15,20,30,.74);display:none;align-items:center;justify-content:center;padding:18px}
+.bvi-overlay.on{display:flex}
+.bvi-card{position:relative;width:min(760px,96vw);background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.45);font-family:Inter,system-ui,sans-serif}
+.bvi-close{position:absolute;top:6px;right:12px;z-index:5;background:transparent;border:none;font-size:28px;line-height:1;color:#54657A;cursor:pointer}
+.bvi-stage{position:relative;aspect-ratio:16/9;background:#fff;border-bottom:1px solid #E3E9EF}
+.bvi-stage::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:#5B4B8A;z-index:2}
+.bvi-scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 8%;opacity:0;transition:opacity .5s}
+.bvi-scene.on{opacity:1}
+.bvi-k{font:700 12px/1 Inter,sans-serif;letter-spacing:3px;color:#5B4B8A;margin-bottom:14px;text-transform:uppercase}
+.bvi-t{font-family:'DM Serif Display',Georgia,serif;color:#1A3A5C;font-weight:400;font-size:clamp(22px,4.6vw,38px);line-height:1.14;margin:0}
+.bvi-s{color:#54657A;font-size:clamp(14px,2.5vw,18px);margin-top:12px;max-width:44ch}
+.bvi-bar{height:6px;background:#E3E9EF}
+.bvi-fill{height:100%;width:0;background:#5B4B8A;transition:width .25s linear}
+.bvi-ctrls{display:flex;align-items:center;gap:12px;padding:10px 14px}
+.bvi-play{background:#E85820;color:#fff;border:none;border-radius:7px;padding:9px 18px;font:700 14px Inter,sans-serif;cursor:pointer}
+.bvi-label{color:#54657A;font-size:13px}
+</style>
+<script>
+(function(){
+  var scenes = [{"f": 0.0, "k": "ISO 42001 · Bloco 1", "t": "Os alicerces do sistema", "s": "Módulos 1 a 3"}, {"f": 0.1, "k": "Módulo 1", "t": "O que é um AIMS?", "s": "Governar a IA com método, e por que certificá-lo"}, {"f": 0.33, "k": "Módulo 2", "t": "Conhecer o terreno", "s": "Contexto, partes interessadas e escopo"}, {"f": 0.6, "k": "Módulo 3", "t": "A liderança muda tudo", "s": "Política de IA e distribuição de papéis"}, {"f": 0.86, "k": "Comece por aqui", "t": "Capacite-se em ISO 42001", "s": "cursosiso.com"}];
+  var stage=document.getElementById('bviStage'), h='';
+  scenes.forEach(function(s,i){
+    h+='<div class="bvi-scene'+(i===0?' on':'')+'" data-i="'+i+'"><div class="bvi-k">'+s.k+'</div><h3 class="bvi-t">'+s.t+'</h3>'+(s.s?'<p class="bvi-s">'+s.s+'</p>':'')+'</div>';
+  });
+  stage.innerHTML=h;
+  var a=document.getElementById('bviAudio'), play=document.getElementById('bviPlay'), fill=document.getElementById('bviFill');
+  function show(i){var n=stage.querySelectorAll('.bvi-scene');for(var k=0;k<n.length;k++)n[k].classList.toggle('on',+n[k].getAttribute('data-i')===i);}
+  a.addEventListener('timeupdate',function(){
+    var d=a.duration||1,f=a.currentTime/d,idx=0;
+    for(var i=0;i<scenes.length;i++){if(f>=scenes[i].f)idx=i;}
+    show(idx); fill.style.width=(f*100)+'%';
+  });
+  a.addEventListener('ended',function(){play.textContent='Repetir';});
+  window.bviOpen=function(){document.getElementById('bviOverlay').classList.add('on');a.currentTime=0;var p=a.play();if(p&&p.catch)p.catch(function(){});play.textContent='Pausar';};
+  window.bviClose=function(){a.pause();document.getElementById('bviOverlay').classList.remove('on');};
+  window.bviToggle=function(){if(a.paused){if(a.ended)a.currentTime=0;a.play();play.textContent='Pausar';}else{a.pause();play.textContent='Reproduzir';}};
+})();
+</script>
+
 </body></html>

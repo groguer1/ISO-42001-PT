@@ -150,7 +150,9 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
 <div id="shell">
   <div id="progress-wrap"><div id="progress-bar"></div></div>
   <div id="topbar"><div id="course-label">ISO/IEC 42001:2023 — Lead Auditor &amp; Implementer · PT-BR</div><div id="slide-counter">1 / 12</div></div>
-  <div id="stage"><div class="slide slide-cover active" data-index="0">
+  
+    <button class="bvi-banner" onclick="bviOpen()">&#9654;&nbsp;<strong>Resumo do bloco em v&iacute;deo</strong><span class="bvi-banner-sub">&nbsp;&middot;&nbsp;Módulos 4–9</span></button>
+    <div id="stage"><div class="slide slide-cover active" data-index="0">
 <div class="cover-badge">Módulo 6 de 12</div>
 <div class="cover-module">ISO/IEC 42001:2023 · Lead Auditor &amp; Implementer · PT-BR</div>
 <div class="cover-clause">Cláusula 8 — Operação</div>
@@ -228,4 +230,62 @@ function toggleAcc(btn){btn.closest('.acc-item').classList.toggle('open');}
 function switchCase(btn,id){document.querySelectorAll('.case-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.case-pnl').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('cp-'+id).classList.add('active');}
 var C=0,TOTAL=12,QS=[3, 5, 7, 9],QA={3:false,5:false,7:false,9:false},QC={3:1,5:2,7:2,9:2},QSC={3:false,5:false,7:false,9:false},FB={3:{ok:'✅ Correto. O Anexo A.6 trata o retraining como evento do ciclo de vida que ativa obrigações. Novos dados do Open Finance podem introduzir novos padrões ou vieses. O A.6.5 (testes incluindo fairness testing) deve ser executado para o novo modelo. O AI Risk Assessment (8.2) deve ser revisado. E os dados do Open Finance têm base legal específica que deve ser verificada para uso em IA de crédito (LGPD).',fail:'❌ Incorreto. Atualizar documentos no listado mestre não substitui a obrigação de testar o novo modelo antes do deploy. O Anexo A.6 exige que cada nova versão passe pelo processo de verificação e testes (A.6.5) antes da produção, incluindo fairness testing.'},5:{ok:'✅ Correto. A ausência de intervenções não valida o controle A.9.4 automaticamente. Pode significar que o sistema é de alta qualidade — ou que os operadores não sabem como intervir, que o canal não é acessível para clientes, ou que os clientes não sabem que têm esse direito. O auditor deve verificar cada possibilidade.',fail:'❌ Incorreto. A ausência de intervenções requer investigação, não aceitação automática. Em sistema de crédito com milhares de decisões mensais, a ausência total de contestações é estatisticamente improvável se o canal fosse acessível e os operadores capacitados.'},7:{ok:'✅ Correto. A cláusula 8.3 exige verificar a eficácia dos controles — não apenas sua existência. Um controle documentado que não é aplicado consistentemente não é eficaz. A incorporação de nova fonte de dados sem validação é problemática no contexto de fairness: o LinkedIn tem viés de representação que pode introduzir discriminação indireta no modelo.',fail:'❌ Incorreto. Um procedimento existente que não é aplicado consistentemente não é um controle eficaz. 4 meses é tempo suficiente para que a nova fonte deveria ter sido validada se o processo funcionasse corretamente. NC, não observação.'},9:{ok:"✅ Correto. O controle A.8.5 não está sendo implementado de forma efetiva. Comunicar 'pedido não autorizado' sem informar: (1) que a decisão foi tomada por IA, (2) o motivo, (3) o canal para contestação e revisão humana — viola o A.8.5 e a LGPD Art. 20. No setor de saúde suplementar, o CDC também exige motivação de recusas. NC é regular, não Maior — o controle existe no SoA, o problema é a implementação.",fail:"❌ Incorreto. Comunicar a recusa não cumpre o A.8.5. O controle exige que o canal permita: saber que a decisão foi tomada por IA, entender o motivo e contestar exercendo revisão humana. A mensagem 'pedido não autorizado' sem essas informações não cumpre o controle."}},NEXT_MSG='Próximo: Módulo 7 — Cláusula 9 (Avaliação de desempenho): métricas de fairness em produção, auditoria interna e revisão pela direção.',RETRY_MSG='Recomendação: Revise as 9 etapas do ciclo de vida (slide 2), os controles críticos no Brasil (slide 4) e a diferença entre declarar e implementar controles (slides 7 e 9).';
 
-initDots();updUI();</script></body></html>
+initDots();updUI();</script>
+<!-- BLOQUE-VIDEO-INTRO -->
+<div class="bvi-overlay" id="bviOverlay" role="dialog" aria-label="V&iacute;deo resumo do bloco" aria-modal="true">
+  <div class="bvi-card">
+    <button class="bvi-close" onclick="bviClose()" aria-label="Fechar">&times;</button>
+    <div class="bvi-stage" id="bviStage"></div>
+    <div class="bvi-bar"><div class="bvi-fill" id="bviFill"></div></div>
+    <div class="bvi-ctrls">
+      <button class="bvi-play" id="bviPlay" onclick="bviToggle()">Pausar</button>
+      <span class="bvi-label">Resumo · Módulos 4–9</span>
+    </div>
+    <audio id="bviAudio" src="media/bloque-2.mp3" preload="metadata"></audio>
+  </div>
+</div>
+<style>
+.bvi-banner{display:block;width:calc(100% + 24px);margin:8px -12px 0;border:none;cursor:pointer;background:#5B4B8A;color:#fff;padding:9px 14px;font:600 13.5px/1.35 Inter,system-ui,sans-serif;text-align:center;flex-shrink:0;letter-spacing:.2px}
+.bvi-banner:hover{background:#4a3d73}
+.bvi-banner strong{font-weight:800}
+.bvi-banner-sub{opacity:.82;font-weight:600}
+.bvi-overlay{position:fixed;inset:0;z-index:9999;background:rgba(15,20,30,.74);display:none;align-items:center;justify-content:center;padding:18px}
+.bvi-overlay.on{display:flex}
+.bvi-card{position:relative;width:min(760px,96vw);background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.45);font-family:Inter,system-ui,sans-serif}
+.bvi-close{position:absolute;top:6px;right:12px;z-index:5;background:transparent;border:none;font-size:28px;line-height:1;color:#54657A;cursor:pointer}
+.bvi-stage{position:relative;aspect-ratio:16/9;background:#fff;border-bottom:1px solid #E3E9EF}
+.bvi-stage::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:#5B4B8A;z-index:2}
+.bvi-scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 8%;opacity:0;transition:opacity .5s}
+.bvi-scene.on{opacity:1}
+.bvi-k{font:700 12px/1 Inter,sans-serif;letter-spacing:3px;color:#5B4B8A;margin-bottom:14px;text-transform:uppercase}
+.bvi-t{font-family:'DM Serif Display',Georgia,serif;color:#1A3A5C;font-weight:400;font-size:clamp(22px,4.6vw,38px);line-height:1.14;margin:0}
+.bvi-s{color:#54657A;font-size:clamp(14px,2.5vw,18px);margin-top:12px;max-width:44ch}
+.bvi-bar{height:6px;background:#E3E9EF}
+.bvi-fill{height:100%;width:0;background:#5B4B8A;transition:width .25s linear}
+.bvi-ctrls{display:flex;align-items:center;gap:12px;padding:10px 14px}
+.bvi-play{background:#E85820;color:#fff;border:none;border-radius:7px;padding:9px 18px;font:700 14px Inter,sans-serif;cursor:pointer}
+.bvi-label{color:#54657A;font-size:13px}
+</style>
+<script>
+(function(){
+  var scenes = [{"f": 0.0, "k": "ISO 42001 · Bloco 2", "t": "Implantar o sistema", "s": "Módulos 4 a 9"}, {"f": 0.16, "k": "Módulo 4", "t": "Planejamento", "s": "Riscos, avaliação de impacto e Declaração de Aplicabilidade"}, {"f": 0.4, "k": "Módulo 5", "t": "Suporte", "s": "Recursos, competências e comunicação"}, {"f": 0.6, "k": "Módulo 6", "t": "Operação", "s": "O ciclo de vida da IA"}, {"f": 0.78, "k": "Módulos 7-9", "t": "Medir, melhorar e controlar", "s": "Os 38 controles do Anexo A"}, {"f": 0.92, "k": "Comece por aqui", "t": "Capacite-se em ISO 42001", "s": "cursosiso.com"}];
+  var stage=document.getElementById('bviStage'), h='';
+  scenes.forEach(function(s,i){
+    h+='<div class="bvi-scene'+(i===0?' on':'')+'" data-i="'+i+'"><div class="bvi-k">'+s.k+'</div><h3 class="bvi-t">'+s.t+'</h3>'+(s.s?'<p class="bvi-s">'+s.s+'</p>':'')+'</div>';
+  });
+  stage.innerHTML=h;
+  var a=document.getElementById('bviAudio'), play=document.getElementById('bviPlay'), fill=document.getElementById('bviFill');
+  function show(i){var n=stage.querySelectorAll('.bvi-scene');for(var k=0;k<n.length;k++)n[k].classList.toggle('on',+n[k].getAttribute('data-i')===i);}
+  a.addEventListener('timeupdate',function(){
+    var d=a.duration||1,f=a.currentTime/d,idx=0;
+    for(var i=0;i<scenes.length;i++){if(f>=scenes[i].f)idx=i;}
+    show(idx); fill.style.width=(f*100)+'%';
+  });
+  a.addEventListener('ended',function(){play.textContent='Repetir';});
+  window.bviOpen=function(){document.getElementById('bviOverlay').classList.add('on');a.currentTime=0;var p=a.play();if(p&&p.catch)p.catch(function(){});play.textContent='Pausar';};
+  window.bviClose=function(){a.pause();document.getElementById('bviOverlay').classList.remove('on');};
+  window.bviToggle=function(){if(a.paused){if(a.ended)a.currentTime=0;a.play();play.textContent='Pausar';}else{a.pause();play.textContent='Reproduzir';}};
+})();
+</script>
+
+</body></html>
